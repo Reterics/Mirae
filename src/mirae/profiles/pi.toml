@@ -1,0 +1,13 @@
+# Raspberry Pi 5 on the robot. Pin numbers live in mirae/config.py defaults;
+# override them in /etc/mirae/mirae.toml rather than editing this file.
+[hardware]
+backend = "pi"
+
+[api]
+host = "0.0.0.0"
+
+[ai]
+provider = "none"
+
+[vision]
+source = "picamera2"

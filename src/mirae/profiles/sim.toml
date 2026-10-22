@@ -1,0 +1,11 @@
+# Development profile: runs on Windows, macOS, Linux and CI with no hardware.
+[hardware]
+backend = "sim"
+
+[api]
+host = "127.0.0.1"
+
+[ai]
+# Rule-based stand-in so the intent pipeline works offline.
+# Switch to "openai_compat" to talk to a local Ollama.
+provider = "fake"

@@ -1,0 +1,19 @@
+# Append to /boot/firmware/config.txt on the robot's Raspberry Pi 5, then reboot.
+# VERIFY ON HARDWARE: none of this has been tested on the robot yet.
+
+# I2C1 on GPIO2/3 for the VL53L1X
+dtparam=i2c_arm=on
+
+# I2S on GPIO18-21, shared by the INMP441 mic (data in, GPIO20) and the
+# MAX98357 amp (data out, GPIO21). One overlay drives both directions; this
+# one is the common choice for the INMP441 + MAX98357 pair. Check with
+# `arecord -l` and `aplay -l` that a capture and a playback device appear.
+dtparam=i2s=on
+dtoverlay=googlevoicehat-soundcard
+
+# Camera Module 3 NoIR is found automatically (camera_auto_detect=1 is the default).
+
+# Optional: hardware PWM on GPIO12/13 for the motors, instead of lgpio's
+# software PWM. The Pi 5 pin function numbers differ from earlier Pis; check
+# /boot/firmware/overlays/README before enabling.
+# dtoverlay=pwm-2chan,pin=12,func=4,pin2=13,func2=4

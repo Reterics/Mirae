@@ -1,0 +1,82 @@
+# ---------------------------------------------------------------------------
+# Python
+# ---------------------------------------------------------------------------
+__pycache__/
+*.py[cod]
+*.so
+*.egg-info/
+/build/
+/dist/
+
+# Virtual environments (uv creates .venv/)
+.venv/
+venv/
+
+# Tooling caches and reports
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.coverage
+.coverage.*
+htmlcov/
+coverage.xml
+
+# ---------------------------------------------------------------------------
+# Robot runtime data
+# ---------------------------------------------------------------------------
+# Model weights are downloaded at runtime, not committed
+/models/
+# Recordings, logs, snapshots
+/var/
+*.log
+
+# Local config and secrets (API keys for remote AI providers)
+mirae.local.toml
+.env
+.env.*
+!.env.example
+
+# ---------------------------------------------------------------------------
+# CAD
+# ---------------------------------------------------------------------------
+# Downloaded render assets (Poly Haven HDRI + textures, ~33 MB); re-download per CREDITS.md
+cad/renders/assets/*
+!cad/renders/assets/CREDITS.md
+
+# Blender autosave/backup copies
+*.blend[0-9]
+*.blend[0-9][0-9]
+*.blend@
+
+# ---------------------------------------------------------------------------
+# Editors and IDEs
+# ---------------------------------------------------------------------------
+# JetBrains (PyCharm/IDEA): per-user workspace state
+.idea/
+*.iml
+# VS Code: keep shared settings/extensions, ignore the rest
+.vscode/*
+!.vscode/settings.json
+!.vscode/extensions.json
+!.vscode/launch.json
+*.code-workspace
+
+# ---------------------------------------------------------------------------
+# Operating systems
+# ---------------------------------------------------------------------------
+# macOS
+.DS_Store
+._*
+.AppleDouble
+.Spotlight-V100
+.Trashes
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+*.lnk
+# Editor swap/backup files
+*~
+*.swp
+*.swo

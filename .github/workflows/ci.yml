@@ -1,0 +1,63 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          lfs: false
+      - uses: astral-sh/setup-uv@v6
+        with:
+          python-version: "3.13"
+      - run: uv sync --locked
+      - run: uv run ruff check .
+      - run: uv run ruff format --check .
+      - run: uv run mypy
+
+  test:
+    # Simulated hardware only: no Pi libraries are installed or imported.
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+        # 3.11 = Raspberry Pi OS Bookworm, 3.13 = Trixie
+        python: ["3.11", "3.13"]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          lfs: false
+      - uses: astral-sh/setup-uv@v6
+        with:
+          python-version: ${{ matrix.python }}
+      - run: uv sync --locked
+      - run: uv run pytest
+
+  pi-deps-arm64:
+    # Checks that the Pi and heavy AI extras resolve and install on 64-bit ARM
+    # (the Pi 5's architecture) and that the test suite passes there.
+    # ubuntu-24.04-arm runners are free for public repositories; on a private
+    # repo without ARM runners, remove this job or switch it to QEMU.
+    runs-on: ubuntu-24.04-arm
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          lfs: false
+      - uses: astral-sh/setup-uv@v6
+        with:
+          python-version: "3.13"
+      - run: sudo apt-get update && sudo apt-get install -y libportaudio2
+      - run: uv sync --locked --extra pi --extra vision --extra speech
+      - name: Import optional engines
+        run: uv run python -c "import gpiozero, smbus2, cv2, onnxruntime, faster_whisper, sounddevice; print('ok')"
+      - run: uv run pytest
