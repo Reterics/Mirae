@@ -10,6 +10,11 @@
 </p>
 
 <p align="center">
+  <a href="https://github.com/Reterics/Mirae/actions/workflows/ci.yml"><img alt="Build status" src="https://img.shields.io/github/actions/workflow/status/Reterics/Mirae/ci.yml?branch=main&label=build"></a>
+  <a href="https://reterics.github.io/Mirae/"><img alt="Website: reterics.github.io/Mirae" src="https://img.shields.io/badge/website-reterics.github.io%2FMirae-1c1a18"></a>
+</p>
+
+<p align="center">
   <img alt="Status: early prototype" src="https://img.shields.io/badge/status-early%20prototype-orange">
   <img alt="Raspberry Pi 5" src="https://img.shields.io/badge/Raspberry%20Pi-5-C51A4A?logo=raspberrypi&logoColor=white">
   <img alt="3D printable in PLA and PETG" src="https://img.shields.io/badge/3D%20print-PLA%20%7C%20PETG-2ea44f">
@@ -23,6 +28,7 @@
 <p align="center"><sub>Rendered from the exact printable model in <a href="cad/README.md"><code>cad/</code></a>; no AI image generation.</sub></p>
 
 <p align="center">
+  <a href="https://reterics.github.io/Mirae/"><img alt="Open the website" src="https://img.shields.io/badge/Open-Website-1c1a18?style=for-the-badge"></a>
   <a href="cad/stl/"><img alt="Download the STL files" src="https://img.shields.io/badge/Download-STL%20files-2ea44f?style=for-the-badge"></a>
   <a href="docs/hestore_20261022.xml"><img alt="Download the shopping cart" src="https://img.shields.io/badge/Download-Shopping%20cart-0366d6?style=for-the-badge"></a>
 </p>
