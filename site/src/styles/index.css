@@ -1,0 +1,201 @@
+@layer theme, base, components, utilities;
+
+@import "@fontsource-variable/inter-tight/wght.css";
+@import "@fontsource/jetbrains-mono/latin-500.css";
+@import "lenis/dist/lenis.css";
+/* No preflight: the base layer below is the site's own reset. */
+@import "tailwindcss/theme.css" layer(theme);
+@import "tailwindcss/utilities.css" layer(utilities);
+
+/* ------------------------------------------------------------ tokens: warm paper */
+@theme {
+  --color-*: initial;
+  --color-bg: #f6f3ee;
+  --color-surface: #ffffff;
+  --color-sunk: #efeae3;
+  --color-ink: #1c1a18;
+  --color-ink-2: #45403a;
+  --color-mute: #6e675f;
+  --color-line: #e4ded5;
+  --color-line-strong: #d6cec3;
+  --color-accent: #e8964a; /* eye amber: dots, lines, glows only (not text on paper) */
+  --color-accent-ink: #9a5418; /* accessible amber for text */
+  --color-white: #ffffff;
+
+  --font-*: initial;
+  --font-sans: "Inter Tight Variable", "Inter Tight", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+
+  --breakpoint-*: initial;
+  --radius-card: 20px;
+  --radius-card-lg: 28px;
+}
+
+/* Breakpoints are max-width (desktop first), inclusive like the original media queries. */
+@custom-variant max-1080 (@media (max-width: 1080px));
+@custom-variant max-960 (@media (max-width: 960px));
+@custom-variant max-560 (@media (max-width: 560px));
+/* Hover applies on touch screens too, as plain :hover did before. */
+@custom-variant hover (&:hover);
+
+@layer base {
+  :root {
+    --header-h: 68px;
+    --gutter: clamp(16px, 4vw, 56px);
+    --max: 1320px;
+    --ease: cubic-bezier(0.22, 1, 0.36, 1);
+
+    color-scheme: light;
+  }
+
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+  }
+  html {
+    -webkit-text-size-adjust: 100%;
+    scroll-padding-top: var(--header-h);
+  }
+  body {
+    margin: 0;
+    background: var(--color-bg);
+    color: var(--color-ink);
+    font: 400 17px/1.55 var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    overflow-x: clip;
+  }
+  img,
+  canvas,
+  video {
+    display: block;
+    max-width: 100%;
+  }
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
+  h1,
+  h2,
+  h3,
+  p {
+    margin: 0;
+  }
+  h1,
+  h2,
+  h3 {
+    font-weight: 500;
+    letter-spacing: -0.035em;
+    line-height: 1.02;
+  }
+  ul,
+  ol {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  ::selection {
+    background: #f3d2b0;
+  }
+  :focus-visible {
+    outline: 2px solid var(--color-ink);
+    outline-offset: 3px;
+    border-radius: 6px;
+  }
+  section {
+    scroll-margin-top: var(--header-h);
+  }
+  [data-reveal] {
+    will-change: transform, opacity;
+  }
+
+  @media (max-width: 560px) {
+    body {
+      font-size: 16px;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      transition-duration: 0.01ms !important;
+      animation-duration: 0.01ms !important;
+    }
+  }
+}
+
+/* ------------------------------------------------------------ utilities Tailwind doesn't have */
+@utility wrap {
+  width: 100%;
+  max-width: calc(var(--max) + 2 * var(--gutter));
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+}
+
+/* Art-directed gradients, too long to read as class names. */
+@utility hero-scrim {
+  /* legibility: darken the blurred left of the photo and the top behind the header */
+  &::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background:
+      linear-gradient(90deg, rgb(20 16 12 / 0.62) 0%, rgb(20 16 12 / 0.3) 38%, rgb(20 16 12 / 0) 62%),
+      linear-gradient(180deg, rgb(20 16 12 / 0.45) 0%, rgb(20 16 12 / 0) 18%);
+  }
+  @media (max-width: 560px) {
+    &::after {
+      background: linear-gradient(
+        180deg,
+        rgb(20 16 12 / 0.55) 0%,
+        rgb(20 16 12 / 0.15) 35%,
+        rgb(20 16 12 / 0) 50%,
+        rgb(20 16 12 / 0.55) 100%
+      );
+    }
+  }
+}
+@utility turn-glow {
+  &::before {
+    content: "";
+    position: absolute;
+    inset: 8% 6% 4%;
+    border-radius: 50%;
+    background: radial-gradient(ellipse at 50% 58%, #ebe4da 0%, rgb(246 243 238 / 0) 68%);
+  }
+}
+@utility cta-wash {
+  &::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background:
+      linear-gradient(
+        180deg,
+        var(--color-bg) 0%,
+        rgb(246 243 238 / 0.55) 30%,
+        rgb(246 243 238 / 0.55) 70%,
+        var(--color-bg) 100%
+      ),
+      radial-gradient(ellipse at center, rgb(246 243 238 / 0.65), rgb(246 243 238 / 0.2) 70%);
+  }
+}
+
+/* There's no preflight, so a display utility would beat the hidden attribute; hidden always wins. */
+[hidden] {
+  display: none !important;
+}
+
+/* Assembly guide, watch mode: the current chapter fills over the step's length (--d). */
+@keyframes watch-fill {
+  from {
+    width: 0%;
+  }
+  to {
+    width: 100%;
+  }
+}

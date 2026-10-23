@@ -1,0 +1,8 @@
+dist/
+public/media/
+package-lock.json
+*.py
+src/xray-anchors.json
+# Prebuilt assembly metadata
+src/assembly/stills.json
+src/assembly/viewer/model.json

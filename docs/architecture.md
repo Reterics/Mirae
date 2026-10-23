@@ -104,7 +104,6 @@ src/mirae/
 └── api/        FastAPI app
 tests/
 deploy/         Pi install script, systemd unit, boot config
-cad/            Blender sources, STLs, renders
-electronics/    wiring and diagrams (planned)
+cad/            printable STLs, print and assembly instructions
 docs/           documentation
 ```

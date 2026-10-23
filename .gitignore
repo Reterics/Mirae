@@ -39,9 +39,24 @@ mirae.local.toml
 # ---------------------------------------------------------------------------
 # CAD
 # ---------------------------------------------------------------------------
-# Downloaded render assets (Poly Haven HDRI + textures, ~33 MB); re-download per CREDITS.md
-cad/renders/assets/*
-!cad/renders/assets/CREDITS.md
+# Private authoring sources and tooling. Git contains printable exports and
+# production website assets; these inputs stay on the maintainer's machine.
+cad/blender/
+cad/low-poly/
+cad/reference/
+cad/renders/assets/
+cad/renders/marketing/
+site/build_media.py
+site/optimize_glb.py
+assets/brand/favicon-16.png
+assets/brand/favicon.ico
+
+# Local render caches. Only final website media and the documentation preview
+# belong in Git; production media credits are in assets/CREDITS.md.
+cad/renders/web/
+cad/renders/assembly/
+cad/renders/assembly-web/
+cad/renders/mirae_*.png
 
 # Blender autosave/backup copies
 *.blend[0-9]

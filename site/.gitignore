@@ -1,0 +1,11 @@
+# Installed dependencies and generated build output.
+/node_modules/
+/dist/
+
+# Local tooling caches (Python caches are ignored by the root .gitignore).
+/.vite/
+/.vite-temp/
+*.tsbuildinfo
+
+# Keep public/media/ and generated src/*.json: the site needs them, and CI
+# builds directly from Git without running Blender or build_media.py.
