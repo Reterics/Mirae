@@ -12,13 +12,8 @@
 <p align="center">
   <a href="https://github.com/Reterics/Mirae/actions/workflows/ci.yml"><img alt="Build status" src="https://img.shields.io/github/actions/workflow/status/Reterics/Mirae/ci.yml?branch=main&label=build"></a>
   <a href="https://reterics.github.io/Mirae/"><img alt="Website: reterics.github.io/Mirae" src="https://img.shields.io/badge/website-reterics.github.io%2FMirae-1c1a18"></a>
-</p>
-
-<p align="center">
   <img alt="Status: early prototype" src="https://img.shields.io/badge/status-early%20prototype-orange">
   <img alt="Raspberry Pi 5" src="https://img.shields.io/badge/Raspberry%20Pi-5-C51A4A?logo=raspberrypi&logoColor=white">
-  <img alt="3D printable in PLA and PETG" src="https://img.shields.io/badge/3D%20print-PLA%20%7C%20PETG-2ea44f">
-  <img alt="Local-first" src="https://img.shields.io/badge/AI-local--first-6f42c1">
 </p>
 
 <p align="center">
