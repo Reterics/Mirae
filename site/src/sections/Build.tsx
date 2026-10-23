@@ -1,10 +1,12 @@
+import { Link as RouterLink } from "react-router";
+
 import { ButtonLink } from "../components/Link";
 import { LazyVideo } from "../components/LazyVideo";
 import { SectionHead } from "../components/SectionHead";
 import { type Filament, PARTS } from "../content";
 import { cx } from "../lib";
 import { LINKS } from "../site";
-import { lead } from "../ui";
+import { buttonClass, ctaButton, lead } from "../ui";
 
 const SWATCH: Record<Filament, string> = { white: "bg-[#f1ede6]", charcoal: "bg-[#34302d]", black: "bg-[#111]" };
 
@@ -30,8 +32,8 @@ export function Build() {
           muted="Wire it this weekend."
         />
         <p className={cx(lead, "max-w-[560px] text-mute")} data-reveal>
-          Download the ready-to-print STL files and follow the assembly guide. Each part fits a 220 × 220 mm bed and
-          prints in PLA or PETG. Check the part dimensions and hardware clearances before assembly.
+          Get the ready-to-print STL files and follow the step-by-step assembly guide. Each part fits a 220 × 220 mm bed
+          and prints in PLA or PETG. Check the part dimensions and hardware clearances before assembly.
         </p>
         <table className="mt-7 w-full border-collapse text-[15px] max-560:text-[14px]" data-reveal>
           <caption className="sr-only">Printed parts, print size in millimetres and colour</caption>
@@ -67,10 +69,13 @@ export function Build() {
           </tbody>
         </table>
         <div className="mt-[30px] flex flex-wrap gap-3" data-reveal>
-          <ButtonLink variant="dark" href={LINKS.stl}>
-            Download STL files
+          <RouterLink className={cx(buttonClass("dark"), ctaButton)} to="/assembly">
+            Open the assembly guide
+          </RouterLink>
+          <ButtonLink variant="line" className={ctaButton} href={LINKS.stl}>
+            STL files
           </ButtonLink>
-          <ButtonLink variant="line" href={LINKS.partsList}>
+          <ButtonLink variant="line" className={ctaButton} href={LINKS.partsList}>
             Parts list
           </ButtonLink>
         </div>

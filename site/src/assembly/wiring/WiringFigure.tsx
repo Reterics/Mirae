@@ -82,7 +82,15 @@ export function WiringFigure({
       >
         <Diagram className={FIGURE.layer} />
       </button>
-      <button type="button" className={cx(buttonClass("light", true), "absolute right-3 bottom-3")} onClick={open}>
+      {/* below the stage on narrow screens (the frame leaves room), where it would cover the sheet */}
+      <button
+        type="button"
+        className={cx(
+          buttonClass("light", true),
+          "absolute right-3 bottom-3 max-960:inset-x-0 max-960:top-[calc(100%+8px)] max-960:bottom-auto max-960:[box-shadow:0_0_0_1px_var(--color-line)]",
+        )}
+        onClick={open}
+      >
         Open full size
       </button>
       <dialog

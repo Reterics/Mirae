@@ -11,11 +11,11 @@ export function Footer() {
         <p className="text-[14px] text-mute">{SITE.tagline}</p>
       </div>
       <nav
-        className="flex flex-wrap items-center gap-x-[26px] gap-y-2 text-[15px] text-mute"
+        className="flex flex-wrap items-center gap-x-[26px] gap-y-2 text-[15px] text-mute max-560:gap-x-5 max-560:gap-y-0"
         aria-label="Documentation"
       >
         {DOC_LINKS.map(({ label, href }) => (
-          <Link key={label} className="hover:text-ink" href={href}>
+          <Link key={label} className="hover:text-ink max-560:py-3" href={href}>
             {label}
           </Link>
         ))}

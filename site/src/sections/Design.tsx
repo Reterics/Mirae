@@ -80,6 +80,16 @@ export function Design() {
       id="design"
       aria-labelledby="design-title"
     >
+      {/* jump targets for the chapter tabs: the middle of each chapter's share of the scroll */}
+      {CHAPTERS.map(({ label }, i) => (
+        <div
+          key={label}
+          id={`design-${label.toLowerCase()}`}
+          className="pointer-events-none absolute left-0 h-px w-px"
+          style={{ top: `${((i + 0.5) / CHAPTERS.length) * 200}vh` }}
+          tabIndex={-1}
+        />
+      ))}
       <div className="sticky top-0 h-svh overflow-hidden pt-(--header-h)">
         <div
           className={cx(
@@ -144,21 +154,30 @@ export function Design() {
             />
           </div>
 
-          <div
+          <nav
             className="col-2 row-3 w-[min(420px,100%)] justify-self-end max-960:col-1 max-960:row-4 max-960:w-full"
-            aria-hidden="true"
+            aria-label="Design chapters"
           >
-            <div className="h-0.5 overflow-hidden rounded-[2px] bg-line">
+            <div className="h-0.5 overflow-hidden rounded-[2px] bg-line" aria-hidden="true">
               <span ref={fillRef} className="block h-full origin-left [transform:scaleX(0)] bg-ink" />
             </div>
-            <ol className="mt-3 grid grid-cols-4 font-mono text-[11px] leading-none font-medium tracking-[0.14em] text-[#a39b91] uppercase [transition:color_0.3s]">
+            <ol className="grid grid-cols-4 font-mono text-[12px] leading-none font-medium tracking-[0.14em] uppercase">
               {CHAPTERS.map(({ label }, i) => (
-                <li key={label} className={cx(i <= chapter && "text-ink") || undefined}>
-                  {label}
+                <li key={label}>
+                  <a
+                    href={`#design-${label.toLowerCase()}`}
+                    className={cx(
+                      "block py-3 [transition:color_0.3s] hover:text-ink",
+                      i === chapter ? "text-ink" : "text-mute",
+                    )}
+                    aria-current={i === chapter ? "step" : undefined}
+                  >
+                    {label}
+                  </a>
                 </li>
               ))}
             </ol>
-          </div>
+          </nav>
           <p className="col-1 row-3 self-end font-mono text-[11px] leading-[1.5] font-medium text-mute max-960:hidden">
             Rendered in 3D from the exact printable model.
           </p>

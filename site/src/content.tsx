@@ -191,13 +191,13 @@ export const VOCABULARY: readonly string[] = [
 ];
 
 export const ROADMAP: readonly { version: string; title: string; body: string; current?: boolean }[] = [
-  { version: "V0.1", title: "Movement", body: "GPIO, motor driver, basic REST API", current: true },
-  { version: "V0.2", title: "Sensors", body: "ToF, obstacle stop, encoders, odometry" },
-  { version: "V0.3", title: "Vision", body: "Camera streaming, person detection and tracking" },
-  { version: "V0.4", title: "Voice", body: "Microphone, speaker, Whisper, TTS" },
-  { version: "V0.5", title: "AI", body: "LLM abstraction, Ollama, behavior engine" },
-  { version: "V0.6", title: "Autonomy", body: "Exploration, following, personality states" },
-  { version: "V1.0", title: "Complete robot", body: "Final enclosure, battery, reproducible build" },
+  { version: "v0.1", title: "Movement", body: "GPIO, motor driver, basic REST API", current: true },
+  { version: "v0.2", title: "Sensors", body: "ToF, obstacle stop, encoders, odometry" },
+  { version: "v0.3", title: "Vision", body: "Camera streaming, person detection and tracking" },
+  { version: "v0.4", title: "Voice", body: "Microphone, speaker, Whisper, TTS" },
+  { version: "v0.5", title: "AI", body: "LLM abstraction, Ollama, behavior engine" },
+  { version: "v0.6", title: "Autonomy", body: "Exploration, following, personality states" },
+  { version: "v1.0", title: "Complete robot", body: "Final enclosure, battery, reproducible build" },
 ];
 
 export const DOC_LINKS: readonly { label: string; href: string }[] = [

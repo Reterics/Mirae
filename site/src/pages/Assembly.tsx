@@ -65,6 +65,23 @@ const stepNumber = (current: boolean, done: boolean): string =>
     done ? "border-ink bg-ink text-bg" : current ? "border-accent text-accent-ink" : "border-line-strong text-mute",
   );
 
+/** The honesty note: in the step list on desktop, under the step on narrow screens. */
+function Untested({ className }: { className: string }) {
+  return (
+    <p className={cx("flex gap-2.5 text-[13px] leading-[1.45] text-ink-2", className)}>
+      <span className={cx(eyebrowDot, "mt-1.5 flex-none")} aria-hidden="true" />
+      <span>
+        Not yet tested on a physical robot. The steps come from the CAD model; check each fit before you force anything,
+        and{" "}
+        <Link className={textLink} href={`${LINKS.repo}/issues`}>
+          tell us
+        </Link>{" "}
+        what didn&apos;t match.
+      </span>
+    </p>
+  );
+}
+
 /** Ticked steps, remembered in this browser only (it may be unavailable: private mode, previews). */
 function useDone(): [ReadonlySet<string>, (id: string) => void] {
   const [done, setDone] = useState<ReadonlySet<string>>(() => {
@@ -236,7 +253,8 @@ export function Assembly() {
               <div className="h-full bg-ink" style={{ width: `${(done.size / STEPS.length) * 100}%` }} />
             </div>
           </div>
-          {/* on narrow screens the list is a scrolling row of numbers; the current title is right below */}
+          {/* on narrow screens the list is a scrolling row of numbers grouped under their stage names; the
+              current title is right below */}
           <nav
             ref={listRef}
             className="min-h-0 flex-1 [scrollbar-width:thin] overflow-y-auto px-2.5 pt-2 pb-4 max-960:flex max-960:gap-1.5 max-960:overflow-x-auto max-960:overflow-y-visible max-960:p-0 max-960:pb-1.5"
@@ -246,8 +264,15 @@ export function Assembly() {
               const steps = STEPS.filter((s) => s.stage === st.id);
               if (steps.length === 0) return null;
               return (
-                <div key={st.id}>
-                  <p className={cx(label, "mx-2 mt-3 mb-1.5 tracking-[0.18em] text-mute max-960:hidden")}>{st.label}</p>
+                <div key={st.id} className="max-960:flex max-960:flex-none max-960:items-center max-960:gap-1.5">
+                  <p
+                    className={cx(
+                      label,
+                      "mx-2 mt-3 mb-1.5 tracking-[0.18em] text-mute max-960:my-0 max-960:mr-0 max-960:ml-2 max-960:text-[11px] max-960:whitespace-nowrap",
+                    )}
+                  >
+                    {st.label}
+                  </p>
                   <ol className="max-960:flex max-960:gap-1.5">
                     {steps.map((s) => (
                       <li key={s.id}>
@@ -266,17 +291,7 @@ export function Assembly() {
               );
             })}
           </nav>
-          <p className="flex gap-2.5 border-t border-t-line px-5 py-3.5 text-[13px] leading-[1.45] text-ink-2 max-960:hidden">
-            <span className={cx(eyebrowDot, "mt-1.5 flex-none")} aria-hidden="true" />
-            <span>
-              Not yet tested on a physical robot. The steps come from the CAD model; check each fit before you force
-              anything, and{" "}
-              <Link className={textLink} href={`${LINKS.repo}/issues`}>
-                tell us
-              </Link>{" "}
-              what didn&apos;t match.
-            </span>
-          </p>
+          <Untested className="border-t border-t-line px-5 py-3.5 max-960:hidden" />
         </aside>
 
         <article
@@ -329,7 +344,7 @@ export function Assembly() {
               </figure>
             )}
             {Diagram && (
-              <figure className={FIGURE.frame}>
+              <figure className={cx(FIGURE.frame, !watch && "max-960:pb-[54px]")}>
                 <div className={FIGURE.stage}>
                   <Diagram watch={watch ? { durationMs: currentMs, playing } : undefined} />
                 </div>
@@ -411,7 +426,11 @@ export function Assembly() {
               onFullscreen={fullscreen}
             />
           )}
-          <footer className="flex items-center justify-between gap-4" hidden={watch}>
+          {/* narrow screens: pinned to the bottom of the screen, so Back / Next never needs a scroll */}
+          <footer
+            className="flex items-center justify-between gap-4 max-960:sticky max-960:bottom-0 max-960:z-10 max-960:-mx-(--gutter) max-960:border-t max-960:border-t-line max-960:bg-bg/95 max-960:px-(--gutter) max-960:py-3 max-960:[backdrop-filter:blur(10px)]"
+            hidden={watch}
+          >
             <label className="inline-flex cursor-pointer items-center gap-2.5 text-[15px]">
               <input
                 className="size-[18px] accent-ink"
@@ -440,6 +459,7 @@ export function Assembly() {
               </button>
             </div>
           </footer>
+          <Untested className="hidden max-960:flex" />
         </article>
       </main>
       <Footer />

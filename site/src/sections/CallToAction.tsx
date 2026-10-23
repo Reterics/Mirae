@@ -1,8 +1,10 @@
+import { Link as RouterLink } from "react-router";
+
 import { ButtonLink } from "../components/Link";
 import { LazyVideo } from "../components/LazyVideo";
 import { cx } from "../lib";
 import { LINKS } from "../site";
-import { ctaButton, ctaRow, h1, lead } from "../ui";
+import { buttonClass, ctaButton, ctaRow, h1, lead } from "../ui";
 
 export function CallToAction() {
   return (
@@ -22,9 +24,9 @@ export function CallToAction() {
           <ButtonLink variant="dark" className={ctaButton} href={LINKS.repo}>
             Star on GitHub
           </ButtonLink>
-          <ButtonLink variant="line" className={ctaButton} href={LINKS.stl}>
-            Download STL files
-          </ButtonLink>
+          <RouterLink className={cx(buttonClass("line"), ctaButton)} to="/assembly">
+            Assembly guide
+          </RouterLink>
         </div>
       </div>
     </section>

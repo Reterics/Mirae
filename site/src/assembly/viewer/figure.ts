@@ -10,6 +10,7 @@ export const FIGURE = {
   arrowHead: "fill-accent",
   label:
     "pointer-events-none absolute rounded-[999px] bg-ink px-[11px] py-1.5 font-sans text-[13px] leading-none font-medium whitespace-nowrap text-bg [transform:translate(40px,-50%)]",
-  controls: "flex items-center gap-4 px-1 pt-3 pb-0",
-  scrub: "flex-1 accent-accent",
+  controls: "flex items-center gap-4 px-1 pt-3 pb-0 max-560:gap-2.5 max-560:px-0",
+  /** min-w-0: a range input's default width would push Reset view out of a phone-width frame. */
+  scrub: "min-w-0 flex-1 accent-accent",
 } as const;

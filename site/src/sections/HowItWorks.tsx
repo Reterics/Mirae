@@ -28,7 +28,7 @@ export function HowItWorks() {
 
         <ol
           className={cx(
-            "relative mb-[clamp(40px,6vw,72px)] grid grid-cols-6 gap-3 [counter-reset:step] max-960:grid-cols-3 max-960:gap-y-7",
+            "relative grid grid-cols-6 gap-3 [counter-reset:step] max-960:grid-cols-3 max-960:gap-y-7",
             // the line joining the steps, hidden once they wrap
             "before:absolute before:top-[23px] before:right-[8%] before:left-[8%] before:h-px before:bg-line-strong before:content-[''] max-960:before:hidden",
           )}
@@ -50,6 +50,20 @@ export function HowItWorks() {
             </li>
           ))}
         </ol>
+        {/* the key to the two coloured steps, which the headline names */}
+        <p
+          className="mt-7 mb-[clamp(40px,6vw,72px)] flex flex-wrap justify-center gap-x-6 gap-y-2 text-[14px] text-mute"
+          data-reveal
+        >
+          <span className="inline-flex items-center gap-2">
+            <i className="size-3 rounded-[50%] border border-accent bg-surface" aria-hidden="true" />
+            The AI suggests an intent
+          </span>
+          <span className="inline-flex items-center gap-2">
+            <i className="size-3 rounded-[50%] bg-ink" aria-hidden="true" />
+            Safety decides what moves
+          </span>
+        </p>
 
         <div className="grid grid-cols-[minmax(0,1.1fr)_minmax(0,1fr)] gap-4 max-960:grid-cols-1">
           <Terminal title="intents from the AI layer" lines={INTENT_EXAMPLE} />
