@@ -22,8 +22,8 @@ export function Footer() {
       </nav>
       <p className="col-[1/-1] font-mono text-[12px] leading-[1.6] font-medium text-mute">
         Product images are rendered in Blender from the exact printable model; the Raspberry Pi 5 in the cutaway is
-        Raspberry Pi Ltd&apos;s official 3D model (MIT). The family illustration and the printing and floor footage are
-        AI-generated.
+        Raspberry Pi Ltd&apos;s official 3D model (MIT). The family illustration, the concept art of other bodies and
+        the printing and floor footage are AI-generated.
       </p>
     </footer>
   );

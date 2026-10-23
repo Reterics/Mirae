@@ -1,7 +1,7 @@
 import { SectionHead } from "../components/SectionHead";
 import { ROADMAP } from "../content";
-import { cx } from "../lib";
-import { eyebrowDot } from "../ui";
+import { cx, media } from "../lib";
+import { eyebrow, eyebrowDot } from "../ui";
 
 export function Roadmap() {
   return (
@@ -41,6 +41,48 @@ export function Roadmap() {
           </li>
         ))}
       </ol>
+
+      {/* Beyond the roadmap: concept art, kept apart from the timeline so it never reads as a plan. On wide
+          screens the text sits in the empty top-left of the cut-out; on narrow ones it stacks and the art
+          scrolls sideways at a readable size. */}
+      <figure
+        className="relative m-0 mt-[clamp(72px,10vw,128px)] border-t border-t-line pt-[clamp(48px,6vw,72px)]"
+        aria-labelledby="bodies-title"
+        data-reveal
+      >
+        <div className="absolute top-[clamp(48px,6vw,72px)] left-0 z-1 max-w-[440px] max-960:static max-960:mb-8">
+          <p className={cx(eyebrow, "text-mute")}>Beyond v1.0</p>
+          <h3
+            className="mt-[18px] text-[length:clamp(30px,3.2vw,46px)] leading-[1.05] tracking-[-0.035em]"
+            id="bodies-title"
+          >
+            One head.
+            <br />
+            <span className="text-mute">Any body.</span>
+          </h3>
+          <p className="mt-4 max-w-[360px] text-[17px] text-mute">
+            The software doesn&rsquo;t define its form. It can become anything.
+          </p>
+        </div>
+        <div
+          className="[scrollbar-width:thin] overflow-x-auto max-960:-mx-(--gutter) max-960:px-(--gutter)"
+          role="region"
+          aria-label="Concept art, scrolls sideways on small screens"
+          tabIndex={0}
+        >
+          <img
+            className="block h-auto w-full max-960:w-[760px] max-960:max-w-none"
+            src={media("bodies.webp")}
+            width="1765"
+            height="717"
+            loading="lazy"
+            alt="Concept art: the same Mirae head on four bodies: today's two-wheeled base, a floor-cleaning robot, a four-wheeled outdoor rover and a humanoid"
+          />
+        </div>
+        <figcaption className="mt-3 font-mono text-[12px] leading-[1.5] font-medium text-mute">
+          Concept art, AI-generated. Ideas, not plans: none of these is on the roadmap.
+        </figcaption>
+      </figure>
     </section>
   );
 }
