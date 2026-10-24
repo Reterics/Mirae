@@ -70,7 +70,8 @@ export function Abilities() {
         muted="Smart enough not to."
       >
         <p className="max-w-[560px] text-[15px] text-mute">
-          Mirae combines perception, conversation and movement into a single embodied AI system. Each capability is developed and validated independently as the platform evolves.
+          Mirae combines perception, conversation and movement into a single embodied AI system. Each capability is
+          developed and validated independently as the platform evolves.
         </p>
       </SectionHead>
 
