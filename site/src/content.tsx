@@ -35,8 +35,8 @@ export interface Scene {
 export const SCENES: readonly Scene[] = [
   {
     num: "01 · Sees",
-    title: "It knows what's in front of it.",
-    body: "Person and object detection and tracking with OpenCV, from a low, forward-looking camera. A time-of-flight sensor measures the distance to whatever is ahead.",
+    title: "It turns vision into context.",
+    body: "Person and object detection gives Mirae visual context, while tracking keeps that context over time. A forward-facing Camera Module 3 provides the image; a time-of-flight sensor adds precise distance information about the space ahead.",
     legend: [
       { swatch: "cam", text: "Camera Module 3 NoIR · 66° × 41° field of view" },
       { swatch: "tof", text: "VL53L1X time-of-flight · 27° cone" },

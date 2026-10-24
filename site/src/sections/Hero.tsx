@@ -4,10 +4,10 @@ import { type RefObject, useRef } from "react";
 
 import { ButtonLink } from "../components/Link";
 import { media, reducedMotion } from "../lib";
-import { LINKS, SITE } from "../site";
+import { LINKS } from "../site";
 import { ctaButton, ctaRow, eyebrow, eyebrowDot } from "../ui";
 
-const TITLE_LINES = SITE.tagline.split(/(?<=\.) /);
+const TITLE_LINES = ["A gatekeeper for your life.", "Present. Private. Yours."];
 
 /** Full-bleed photo of the robot at home, with an intro animation and a slow drift on scroll. */
 export function Hero({ sectionRef }: { sectionRef: RefObject<HTMLElement | null> }) {
@@ -55,18 +55,18 @@ export function Hero({ sectionRef }: { sectionRef: RefObject<HTMLElement | null>
           alt="Mirae, a small warm-white and charcoal robot with two glowing eyes, on an oak floor in a sunlit living room"
         />
       </picture>
-      <div className="wrap pt-[calc(var(--header-h)+48px)] pb-[clamp(48px,10vh,112px)] max-560:self-start max-560:pt-[calc(var(--header-h)+28px)]">
+      <div className="hero-copy pt-[calc(var(--header-h)+48px)] pb-[clamp(48px,10vh,112px)] max-560:self-start max-560:pt-[calc(var(--header-h)+28px)]">
         <p className={`${eyebrow} text-[rgb(255_255_255/0.85)]`} data-intro>
           <span className={eyebrowDot} aria-hidden="true" />
           Open-source companion robot
         </p>
         <h1
-          className="my-6 max-w-[11ch] text-[length:clamp(52px,6.6vw,104px)] leading-[0.98] tracking-[-0.045em] max-560:mt-[18px] max-560:mb-4 max-560:text-[46px]"
+          className="my-6 max-w-[22ch] text-[length:clamp(43px,5.4vw,86px)] leading-[0.98] tracking-[-0.05em] max-560:mt-[18px] max-560:mb-4 max-560:text-[39px]"
           id="hero-title"
         >
           {TITLE_LINES.map((line) => (
-            <span key={line} className="block overflow-hidden pb-[0.06em]">
-              <span className="inline-block" data-intro-line>
+            <span key={line} className="block overflow-hidden pb-[0.06em] last:text-[0.96em]">
+              <span className="inline-block text-balance" data-intro-line>
                 {line}
               </span>
             </span>
@@ -76,8 +76,7 @@ export function Hero({ sectionRef }: { sectionRef: RefObject<HTMLElement | null>
           className="max-w-[470px] text-[length:clamp(17px,1.35vw,19px)] text-[rgb(255_255_255/0.88)] max-560:text-[16px]"
           data-intro
         >
-          A small, hackable AI robot built around a Raspberry Pi 5. It sees you, hears you and answers you, and every
-          part of its body prints on an ordinary 220&nbsp;×&nbsp;220 printer.
+          A local-first companion that sees, listens and protects - while keeping what it learns close to you.
         </p>
         <div className={ctaRow} data-intro>
           <ButtonLink variant="light" className={ctaButton} href="#abilities">

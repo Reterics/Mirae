@@ -35,11 +35,8 @@ export function useSmoothScroll(): void {
       if (target === null) return;
       e.preventDefault();
       if (lenis) lenis.scrollTo(target, { offset: 0, duration: 1.4 });
-      else
-        window.scrollTo({
-          top: target === 0 ? 0 : target.getBoundingClientRect().top + window.scrollY,
-          behavior: reducedMotion ? "auto" : "smooth",
-        });
+      else if (target === 0) window.scrollTo({ top: 0, behavior: "instant" });
+      else target.scrollIntoView({ behavior: "instant", block: "start" });
       if (target !== 0) target.focus({ preventScroll: true });
     };
     document.addEventListener("click", onClick);

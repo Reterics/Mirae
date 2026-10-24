@@ -1,8 +1,7 @@
-import { Link } from "../components/Link";
 import { SEC_HEAD, SectionHead } from "../components/SectionHead";
 import { PRINCIPLES, SCENES, type Scene, type Swatch } from "../content";
 import { cx, media } from "../lib";
-import { kicker, photo, textLink } from "../ui";
+import { kicker, photo } from "../ui";
 
 /** Image column first (wider), image column second (`flip`), or two equal columns (`map`). */
 const COLUMNS: Record<NonNullable<Scene["variant"]> | "default", string> = {
@@ -71,12 +70,7 @@ export function Abilities() {
         muted="Smart enough not to."
       >
         <p className="max-w-[560px] text-[15px] text-mute">
-          These are the capabilities the software and hardware are built for. They arrive milestone by milestone; see
-          the{" "}
-          <Link className={textLink} href="#roadmap">
-            roadmap
-          </Link>
-          .
+          Mirae combines perception, conversation and movement into a single embodied AI system. Each capability is developed and validated independently as the platform evolves.
         </p>
       </SectionHead>
 

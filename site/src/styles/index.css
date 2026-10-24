@@ -103,9 +103,6 @@
     outline-offset: 3px;
     border-radius: 6px;
   }
-  section {
-    scroll-margin-top: var(--header-h);
-  }
   [data-reveal] {
     will-change: transform, opacity;
   }
@@ -132,6 +129,21 @@
   max-width: calc(var(--max) + 2 * var(--gutter));
   margin-inline: auto;
   padding-inline: var(--gutter);
+}
+
+@utility hero-copy {
+  width: calc(100% - 2 * var(--gutter));
+  margin-inline: var(--gutter);
+
+  @media (min-width: 961px) {
+    --hero-copy-left: max(24px, calc((100vw - var(--max)) / 2 - 40px));
+    /* The robot's left edge in the 2:1 image, including the 70% object-position crop.
+       Reserve another 40px before it; the image itself stays in place. */
+    --hero-safe-edge: calc(min(60vw, 70vw - min(20svh, 196px)) - 40px);
+    width: min(980px, calc(var(--hero-safe-edge) - var(--hero-copy-left)));
+    margin-left: var(--hero-copy-left);
+    margin-right: auto;
+  }
 }
 
 /* Art-directed gradients, too long to read as class names. */
