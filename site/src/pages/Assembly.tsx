@@ -2,6 +2,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { Link as RouterLink, useLocation, useNavigate } from "react-router";
 
 import { STAGES, STEPS, stepIndex } from "../assembly/steps";
+import { ShoppingCart } from "../assembly/ShoppingCart";
 import { FIGURE } from "../assembly/viewer/figure";
 import { MODEL_STEPS, STILL_STEPS } from "../assembly/viewer/model";
 import { Player } from "../assembly/watch/Player";
@@ -152,6 +153,7 @@ export function Assembly() {
   // mode the space bar plays and pauses.
   useEffect(() => {
     const onKey = (e: KeyboardEvent): void => {
+      if (document.querySelector("dialog[open]")) return;
       if (e.target instanceof HTMLInputElement || e.altKey || e.metaKey || e.ctrlKey) return;
       if (e.key === "ArrowRight") go(index + 1);
       if (e.key === "ArrowLeft") go(index - 1);
@@ -217,6 +219,9 @@ export function Assembly() {
         className="mx-auto grid h-dvh min-h-[640px] w-full max-w-[1760px] grid-cols-[300px_minmax(0,1fr)] gap-7 px-(--gutter) pt-[calc(var(--header-h)+16px)] pb-6 max-960:h-auto max-960:min-h-0 max-960:grid-cols-[minmax(0,1fr)] max-960:gap-6 max-960:pb-16"
       >
         <aside className={RAIL}>
+          <div className="border-b border-b-line px-5 py-4 max-960:border-0 max-960:px-0 max-960:pt-0">
+            <ShoppingCart onOpen={() => setPlaying(false)} />
+          </div>
           <div className="grid gap-3 border-b border-b-line px-5 pt-5 pb-4 max-960:hidden">
             <p className={cx(eyebrow, "text-mute")}>Assembly guide</p>
             <div className="flex rounded-full bg-sunk p-[3px]" role="group" aria-label="Mode">

@@ -64,6 +64,7 @@ const head = (): Plugin => {
  */
 const BRAND_DIR = fileURLToPath(new URL("../assets/brand/", import.meta.url));
 const WIRING_DOC = fileURLToPath(new URL("../docs/wiring.md", import.meta.url));
+const HARDWARE_DOC = fileURLToPath(new URL("../docs/hardware.md", import.meta.url));
 const brandAssets = (): Plugin => ({
   name: "mirae-brand-assets",
   apply: "serve",
@@ -84,8 +85,8 @@ export default defineConfig({
   base: "./", // relative asset paths: the site is deployed into a sub-folder whose name isn't known at build time
   plugins: [react(), tailwindcss(), head(), csp(), brandAssets()],
   // Components import the logo straight from the repo's assets/brand/, outside this package.
-  // ...and the assembly guide's wiring diagrams read ../docs/wiring.md, so the doc stays their only source.
-  server: { fs: { allow: [".", BRAND_DIR, WIRING_DOC] } },
+  // Assembly diagrams and the shopping list read their canonical docs directly.
+  server: { fs: { allow: [".", BRAND_DIR, WIRING_DOC, HARDWARE_DOC] } },
   build: {
     target: "es2022",
     modulePreload: { polyfill: false }, // the polyfill is an inline script

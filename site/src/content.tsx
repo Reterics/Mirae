@@ -4,20 +4,12 @@ import type { ReactNode } from "react";
 import { LINKS } from "./site";
 
 export interface NavItem {
-  id: string;
+  path: string;
   label: string;
 }
 
 export const NAV: readonly NavItem[] = [
-  { id: "abilities", label: "Abilities" },
-  { id: "inside", label: "Inside" },
-  { id: "design", label: "Design" },
-  { id: "build", label: "Build" },
-  { id: "roadmap", label: "Roadmap" },
-];
-
-/** Sub-pages, linked from the header. Paths end in "/" so relative assets resolve on a hard reload. */
-export const GUIDES: readonly { path: string; label: string }[] = [
+  { path: "/", label: "Home" },
   { path: "/assembly", label: "Assembly" },
   { path: "/simulation", label: "Simulation" },
 ];

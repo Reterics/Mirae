@@ -1,28 +1,22 @@
-import { useGSAP } from "@gsap/react";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { type RefObject, useEffect, useRef, useState } from "react";
 import { Link as RouterLink, useLocation } from "react-router";
 
 import { Brand } from "../components/Brand";
 import { GitHubIcon } from "../components/GitHubIcon";
-import { ButtonLink, Link } from "../components/Link";
-import { GUIDES, NAV } from "../content";
-import { useIsHome } from "../hooks/useIsHome";
+import { ButtonLink } from "../components/Link";
+import { NAV } from "../content";
 import { cx } from "../lib";
 import { LINKS } from "../site";
 
 /**
- * Sticky header with a mobile menu. Over a hero photo (heroRef) it starts transparent; on the
- * landing page its section links scroll in place and highlight the section in view.
+ * Sticky header with page navigation and a mobile menu. Over a hero photo it starts transparent.
  */
 export function Header({ heroRef }: { heroRef?: RefObject<HTMLElement | null> }) {
   const ref = useRef<HTMLElement>(null);
-  const isHome = useIsHome();
   const { pathname } = useLocation();
   const [menuOpen, setMenuOpen] = useState(false);
   const [overPhoto, setOverPhoto] = useState(heroRef !== undefined);
   const [scrolled, setScrolled] = useState(false);
-  const [active, setActive] = useState<string | null>(null);
 
   useEffect(() => {
     const update = (): void => {
@@ -43,18 +37,6 @@ export function Header({ heroRef }: { heroRef?: RefObject<HTMLElement | null> })
     document.addEventListener("keydown", onKey);
     return () => document.removeEventListener("keydown", onKey);
   }, []);
-
-  useGSAP(() => {
-    if (!isHome) return;
-    for (const { id } of NAV) {
-      ScrollTrigger.create({
-        trigger: `#${id}`,
-        start: "top 50%",
-        end: "bottom 50%",
-        onToggle: ({ isActive }) => setActive((cur) => (isActive ? id : cur === id ? null : cur)),
-      });
-    }
-  });
 
   const closeMenu = (): void => setMenuOpen(false);
   const link = navLink(overPhoto);
@@ -86,37 +68,17 @@ export function Header({ heroRef }: { heroRef?: RefObject<HTMLElement | null> })
           id="site-nav"
           aria-label="Primary"
         >
-          {NAV.map(({ id, label }) =>
-            isHome ? (
-              <a
-                key={id}
-                className={link}
-                href={`#${id}`}
-                aria-current={active === id || undefined}
-                onClick={closeMenu}
-              >
-                {label}
-              </a>
-            ) : (
-              <RouterLink key={id} className={link} to={{ pathname: "/", hash: `#${id}` }} onClick={closeMenu}>
-                {label}
-              </RouterLink>
-            ),
-          )}
-          {GUIDES.map(({ path, label }) => (
+          {NAV.map(({ path, label }) => (
             <RouterLink
               key={path}
               className={link}
               to={path}
-              aria-current={pathname === path || undefined}
+              aria-current={pathname === path ? "page" : undefined}
               onClick={closeMenu}
             >
               {label}
             </RouterLink>
           ))}
-          <Link className={cx(link, "hidden max-960:block")} href={LINKS.repo}>
-            GitHub
-          </Link>
         </nav>
         <ButtonLink
           variant={overPhoto ? "over" : "line"}
@@ -152,11 +114,11 @@ export function Header({ heroRef }: { heroRef?: RefObject<HTMLElement | null> })
 /** A primary nav link: a pill on desktop, a full-width row in the drop-down menu. Over the hero it's white. */
 const navLink = (over: boolean): string =>
   cx(
-    "rounded-[999px] px-3.5 py-2 text-[15px] [transition:color_0.2s,background-color_0.2s] aria-[current=true]:bg-sunk",
-    "max-960:rounded-none max-960:border-b max-960:border-b-line max-960:px-0 max-960:py-3.5 max-960:text-[18px] max-960:aria-[current=true]:bg-transparent",
+    "rounded-[999px] px-3.5 py-2 text-[15px] [transition:color_0.2s,background-color_0.2s]",
+    "max-960:rounded-none max-960:border-b max-960:border-b-line max-960:px-0 max-960:py-3.5 max-960:text-[18px] max-960:aria-[current=page]:bg-transparent",
     over
-      ? "text-white hover:bg-[rgb(255_255_255/0.12)]"
-      : "text-mute hover:text-ink aria-[current=true]:text-ink max-960:text-ink",
+      ? "text-white hover:bg-[rgb(255_255_255/0.12)] aria-[current=page]:bg-[rgb(255_255_255/0.12)]"
+      : "text-mute hover:text-ink aria-[current=page]:bg-sunk aria-[current=page]:text-ink max-960:text-ink",
   );
 
 /** One line of the menu icon; the two cross into an X while the menu is open. */
