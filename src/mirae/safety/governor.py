@@ -8,14 +8,29 @@ Rules, applied on every control tick:
   * forward motion with the obstacle closer than stop_distance, or no recent
     range reading           -> forward component removed (turning and reversing still allowed)
   * obstacle inside slow_distance -> forward component scaled down linearly
+  * a wheel speeding up      -> limited to ramp_per_s; slowing down and stopping are
+                                immediate, and a reversal starts again from zero
 """
 
 from __future__ import annotations
 
+import math
 from dataclasses import dataclass
 
 from mirae.config import SafetyConfig
 from mirae.core.clock import Clock
+
+# A gap longer than this between two outputs (a stalled loop) counts as this long for the ramp,
+# so a late tick can't jump straight to full speed.
+_MAX_RAMP_DT_S = 0.1
+
+
+def _ramp(previous: float, target: float, step: float) -> float:
+    if previous * target < 0.0:  # reversing: drop to zero first
+        previous = 0.0
+    if abs(target) <= abs(previous):
+        return target
+    return math.copysign(min(abs(target), abs(previous) + step), target)
 
 
 @dataclass(frozen=True)
@@ -40,6 +55,8 @@ class SafetyGovernor:
         self._estop = False
         self._range_mm: float | None = None
         self._range_at = float("-inf")
+        self._last = WheelCommand()
+        self._last_at = clock.now()
 
     @property
     def estopped(self) -> bool:
@@ -78,13 +95,17 @@ class SafetyGovernor:
     def output(self) -> tuple[WheelCommand, SafetyStatus]:
         cfg = self._cfg
         range_mm = self._current_range()
+        now = self._clock.now()
+        dt = min(max(now - self._last_at, 0.0), _MAX_RAMP_DT_S)
+        self._last_at = now
 
         def result(cmd: WheelCommand, limit: str | None) -> tuple[WheelCommand, SafetyStatus]:
+            self._last = cmd
             return cmd, SafetyStatus(estop=self._estop, limit=limit, range_mm=range_mm)
 
         if self._estop:
             return result(WheelCommand(), "estop")
-        if self._clock.now() >= self._deadline:
+        if now >= self._deadline:
             return result(WheelCommand(), None)
 
         limit: str | None = None
@@ -104,5 +125,12 @@ class SafetyGovernor:
                 cut = forward * (1.0 - scale)
                 left, right = left - cut, right - cut
                 limit = "slow_zone"
+
+        if cfg.ramp_per_s is not None:
+            step = cfg.ramp_per_s * dt
+            ramped = (_ramp(self._last.left, left, step), _ramp(self._last.right, right, step))
+            if ramped != (left, right) and limit is None:
+                limit = "ramp"
+            left, right = ramped
 
         return result(WheelCommand(left, right), limit)

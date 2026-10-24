@@ -53,10 +53,10 @@ Its personality comes from software rather than mechanics. Computer vision, spee
 
 | | |
 |---|---|
-| **Size** | 190 × 210 × 145 mm, about 1 kg |
+| **Size** | 190 × 210 × 145 mm, about 1.5 kg |
 | **Body** | Warm-white upper shell over a charcoal base. Soft radii, sloped top and back. |
 | **Face** | Two diffused LED eyes and a status light, on a removable front panel that's ready for a 2–3.5" display |
-| **Stance** | Wheels sit just behind centre and a ball caster sits far forward, making a wide, stable triangle |
+| **Stance** | Wheels sit 30 mm behind centre and a ball caster sits far forward, making a wide, stable triangle |
 | **Access** | Lid held by hidden rear hooks and front magnets: lift the front to open. Built-in battery, charged over USB-C. Every part prints in one piece without supports. |
 
 Ready-to-print STL files, print settings and assembly instructions are in [cad/README.md](cad/README.md). CAD authoring files and media generation tools are maintained privately; this repository contains the files used to build, install and run Mirae and publish its website.
@@ -81,7 +81,7 @@ Deploying to the Pi 5, the API and the safety rules are covered in [docs/softwar
 | Drive | 2× N20 geared motors with encoders, 42 mm wheels, TB6612FNG driver, ball caster |
 | Distance | VL53L1X Time-of-Flight sensor |
 | Audio | INMP441 I2S microphone, MAX98357 amplifier, 4 Ω / 3 W speaker |
-| Power | 4× 18650 Li-ion (2S2P) with BMS, SZ-08CV 5.1 V supply, XL6009-UD 6 V motor supply, USB-C charging |
+| Power | 4× 18650 Li-ion (2S2P) with BMS, SZ-08CV 5.1 V supply, XL6009-UD 12 V motor supply, USB-C charging |
 | Vision | Raspberry Pi Camera Module 3 NoIR (Sony IMX708, 12 MP) |
 
 Apart from the camera, the Raspberry Pi 5, its cooling case and the VL53L1X, the parts cost about **22 600 Ft (net)**. The full shopping list with part numbers is in [docs/hardware.md](docs/hardware.md#shopping-list).

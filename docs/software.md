@@ -54,6 +54,7 @@ How the robot software is built, and how it runs on Windows, macOS, CI and the P
 | Speed limit | Clamped to `safety.max_speed` (0.6) |
 | Obstacle ≤ 120 mm, or no range reading for 0.5 s | Forward component removed. Turning in place and reversing are still allowed. |
 | Obstacle 120–300 mm | Forward component scaled down linearly |
+| Speeding up | Each wheel's output rises at most `safety.ramp_per_s` (1.5 duty per second, so 0.4 s from stop to 0.6). Slowing down, stopping, e-stop and the deadman act at once; a reversal starts again from zero. Only the wheels push, so a sudden full-duty start can lift the caster, worst when pulling away uphill. This limits the duty, not the acceleration itself: the motors' stall torque isn't published. |
 
 The LLM can only produce one of the [intents](../src/mirae/behavior/intents.py) (`stop`, `move`, `turn`, `approach_person`, `follow_person`, `explore`, `say`, `sleep`), and each one has bounded speed and duration. Invalid output is dropped; it never causes motion.
 

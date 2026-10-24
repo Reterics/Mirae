@@ -56,8 +56,9 @@ class HardwareConfig(BaseModel):
 
 class DriveConfig(BaseModel):
     wheel_diameter_mm: float = 42.0
-    track_width_mm: float = 141.0
-    # N20 100 RPM: assumed 150:1 gearbox x 7 PPR encoder. Measure on the real
+    # Wheel centre to wheel centre in the CAD model (cad/blender/build_mirae.py, track_mm).
+    track_width_mm: float = 138.8
+    # N20E-12-100 (100 RPM at 12 V): assumed 150:1 gearbox x 7 PPR encoder. Measure on the real
     # robot (turn a wheel 10 times, divide the count by 10) and override.
     encoder_counts_per_rev: float = 1050.0
     max_wheel_rpm: float = 100.0
@@ -74,6 +75,11 @@ class SafetyConfig(BaseModel):
     slow_distance_mm: float = 300.0
     # A range reading older than this counts as missing; forward motion is blocked.
     range_stale_s: float = 0.5
+    # How fast a wheel's output may grow, in duty per second (None: no limit). Only the wheels
+    # push, so a sudden full-duty start can lift the caster, worst when pulling away uphill.
+    # Slowing down and stopping are never delayed. This limits the duty, not the acceleration
+    # itself: the motors' stall torque is not published.
+    ramp_per_s: float | None = Field(1.5, gt=0.0)
 
 
 class ApiConfig(BaseModel):

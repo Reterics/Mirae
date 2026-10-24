@@ -27,7 +27,7 @@ def test_intent_parsing_and_bounds() -> None:
 
 def test_engine_turn_commands_governor() -> None:
     clock = FakeClock()
-    governor = SafetyGovernor(SafetyConfig(), clock)
+    governor = SafetyGovernor(SafetyConfig(ramp_per_s=None), clock)
     governor.update_range(2000.0)
     engine = BehaviorEngine(governor, EventBus())
 

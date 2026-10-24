@@ -36,18 +36,18 @@ The faceplate LEDs aren't assigned yet.
 
 **Power and logic levels:**
 
-* Power chain: 4 × 18650 (2S2P, 6.0–8.4 V) → HX-2S-JH20 BMS → SZ-08CV set to 5.1 V for the Pi 5 and logic, and XL6009-UD set to 6.0 V for the motors. USB-C 5 V → USBC-2S-LI-BOOST charges the pack through the BMS. Set both converter outputs with a multimeter before connecting any load.
+* Power chain: 4 × 18650 (2S2P, 6.0–8.4 V) → HX-2S-JH20 BMS → SZ-08CV set to 5.1 V for the Pi 5 and logic, and XL6009-UD set to 12.0 V for the motors. USB-C 5 V → USBC-2S-LI-BOOST charges the pack through the BMS. Set both converter outputs with a multimeter before connecting any load.
 * The SL 19123 slide switch is the main power switch: it sits in series with the BMS P+ load output, before the SZ-08CV and XL6009-UD branches. Charging stays connected directly to the BMS and isn't switched.
-* The TB6612 VM pin takes the 6.0 V motor rail from the XL6009-UD, which matches the N20s' 6 V rating.
+* The TB6612 VM pin takes the 12.0 V motor rail from the XL6009-UD, which matches the N20E-12-100s' 12 V rating and stays under the TB6612's 13.5 V VM limit. The XL6009-UD steps up from the 6.0–8.4 V pack.
 * VCC on the TB6612 and on the encoders is 3.3 V from the Pi.
-* Put the 1000 µF capacitor across VM and GND, close to the driver.
+* Put the 1000 µF / 16 V capacitor across VM and GND, close to the driver. A 10 V part must not go on this rail.
 * The INMP441 L/R pin goes to GND (left channel).
 * The MAX98357 VIN is the 5.1 V rail from the SZ-08CV.
 * Current returns to the converter that supplies it. Motor current runs XL6009-UD OUT+ → TB6612 VM → motors → TB6612 GND → XL6009-UD OUT−, never through a Pi GND pin. The amplifier returns to the SZ-08CV the same way. The two converters' IN− terminals meet at BMS P−, the one common ground point.
 
 **Power, ground and motor connections:**
 
-Every module pin that isn't on a GPIO. Rails: `3V3` is the Pi's 3.3 V output (header pins 1 and 17, the same rail inside the Pi), `5V1` the SZ-08CV output, `6V0` the XL6009-UD output, and `GND` the common ground. "Wire goes to" is the exact point each wire lands on. A splice is where several wires are joined into one (soldered Y-joint, small perfboard or terminal block); a converter terminal may take several wires. Module pin names are the ones printed on each board; on the N20E's 6-wire cable, C1 and C2 are the encoder's phase A and phase B wires.
+Every module pin that isn't on a GPIO. Rails: `3V3` is the Pi's 3.3 V output (header pins 1 and 17, the same rail inside the Pi), `5V1` the SZ-08CV output, `12V0` the XL6009-UD output, and `GND` the common ground. "Wire goes to" is the exact point each wire lands on. A splice is where several wires are joined into one (soldered Y-joint, small perfboard or terminal block); a converter terminal may take several wires. Module pin names are the ones printed on each board; on the N20E's 6-wire cable, C1 and C2 are the encoder's phase A and phase B wires.
 
 | Module pin | Connects to | Wire goes to | Notes |
 |---|---|---|---|
@@ -57,13 +57,13 @@ Every module pin that isn't on a GPIO. Rails: `3V3` is the Pi's 3.3 V output (he
 | SZ-08CV Vout− | GND | Pi header pins 6 and 9 | MAX98357 GND and the AI HAT+ 2 also wire to this terminal |
 | XL6009-UD IN+ | BMS P+ | SL 19123 switch | Switched |
 | XL6009-UD IN− | GND | BMS P− | |
-| XL6009-UD OUT+ | 6V0 | TB6612 VM | And the capacitor + |
+| XL6009-UD OUT+ | 12V0 | TB6612 VM | And the capacitor + |
 | XL6009-UD OUT− | GND | TB6612 GND | And the capacitor − |
 | XL6009-UD EN | not connected | | Left open, the output stays on |
 | TB6612 VCC | 3V3 | splice "3V3 drive" (Pi header pin 17) | Logic supply |
-| TB6612 VM | 6V0 | XL6009-UD OUT+ | Motor supply |
+| TB6612 VM | 12V0 | XL6009-UD OUT+ | Motor supply |
 | TB6612 GND | GND | XL6009-UD OUT− | All three GND pins. Never to a Pi GND pin |
-| Capacitor + | 6V0 | TB6612 VM | 1000 µF, across VM and GND at the driver |
+| Capacitor + | 12V0 | TB6612 VM | 1000 µF / 16 V, across VM and GND at the driver |
 | Capacitor − | GND | TB6612 GND | The driver's motor-side GND, beside VM |
 | TB6612 AO1 | Motor L, Motor+ | Motor L, Motor+ | Left motor on channel A |
 | TB6612 AO2 | Motor L, Motor− | Motor L, Motor− | |

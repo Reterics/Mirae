@@ -40,13 +40,13 @@ interface Port {
 const CARDS: Record<string, Card> = {
   pack: { x: 40, y: 120, w: 280, h: 210, title: "2S2P pack + BMS", sub: "HX-2S-JH20 · 6.0–8.4 V", icon: "pack" },
   switch: { x: 440, y: 120, w: 220, h: 210, title: "SL 19123", sub: "Main power switch", icon: "switch" },
-  xl: { x: 800, y: 120, w: 260, h: 240, title: "XL6009-UD", sub: "Set output to 6.0 V", icon: "converter" },
+  xl: { x: 800, y: 120, w: 260, h: 240, title: "XL6009-UD", sub: "Set output to 12.0 V", icon: "converter" },
   charger: { x: 40, y: 540, w: 280, h: 220, title: "USBC-2S-LI-BOOST", sub: "USB-C 5 V input", icon: "charger" },
   sz: { x: 440, y: 540, w: 240, h: 230, title: "SZ-08CV", sub: "Set output to 5.1 V", icon: "converter" },
   driver: { x: 900, y: 540, w: 220, h: 260, title: "TB6612FNG", sub: "HW-166 motor driver", icon: "driver" },
   left: { x: 1210, y: 540, w: 180, h: 180, title: "Left N20E", sub: "Driver channel A", icon: "motor" },
   right: { x: 1210, y: 800, w: 180, h: 180, title: "Right N20E", sub: "Driver channel B", icon: "motor" },
-  cap: { x: 900, y: 870, w: 220, h: 150, title: "1000 µF / 10 V", sub: "Close to the driver", icon: "capacitor" },
+  cap: { x: 900, y: 870, w: 220, h: 150, title: "1000 µF / 16 V", sub: "Close to the driver", icon: "capacitor" },
 };
 
 const PORTS: Record<string, Port> = {

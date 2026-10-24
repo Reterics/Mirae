@@ -125,7 +125,7 @@ export const STEPS: readonly Step[] = [
     instructions: [
       "Power each converter from the pack (through the BMS) or a bench supply within its input range: 5–30 V for both the SZ-08CV and the XL6009-UD.",
       "With nothing connected to the output, adjust the SZ-08CV to 5.1 V. This rail feeds the Pi 5, the amplifier and the logic.",
-      "Adjust the XL6009-UD to 6.0 V. This rail feeds the motors through the driver.",
+      "Adjust the XL6009-UD to 12.0 V. This rail feeds the motors through the driver.",
       "Disconnect the power again.",
     ],
     caution:
@@ -139,13 +139,13 @@ export const STEPS: readonly Step[] = [
     items: [
       { name: "Printed chassis", qty: 1 },
       { name: "M3-INSERT-6 heat-set insert, M3 × 4.6 × 6.0", qty: 8 },
-      { name: "M4-INSERT-6X6 heat-set insert, M4 × 6.0 × 6.0", qty: 2 },
+      { name: "M4-INSERT-6X6 heat-set insert, M4 × 6.0 × 6.0", qty: 3 },
       { name: "Soldering iron with an insert tip", qty: 1 },
     ],
     instructions: [
       "Four M3 inserts go into the tops of the four tall posts in the chassis. The upper shell screws down onto these.",
       "Four M3 inserts go into the four short standoffs in the rear bay, where the SZ-08CV will sit.",
-      "Turn the chassis over. The two M4 inserts go into the two holes near the front of the underside, for the ball caster.",
+      "Turn the chassis over. The three M4 inserts go into the three holes around the large round opening near the front of the underside, for the ball caster.",
       "Press each insert in straight with the hot iron until it's flush, then hold it level for a moment while the plastic sets.",
     ],
     tip: "The holes are Ø4.2 mm for M3 and Ø5.6 mm for M4. If an insert goes in crooked, reheat it and straighten it before the plastic cools.",
@@ -158,7 +158,7 @@ export const STEPS: readonly Step[] = [
     title: "Press the wheels onto the motors",
     label: "N20-3PI-WHL wheel",
     items: [
-      { name: "N20E-06-100 geared motor with encoder", qty: 2 },
+      { name: "N20E-12-100 geared motor with encoder", qty: 2 },
       { name: "N20-3PI-WHL wheel, 42 mm", qty: 2 },
     ],
     instructions: [
@@ -234,15 +234,15 @@ export const STEPS: readonly Step[] = [
     title: "Place the motor supply and the capacitor",
     label: "XL6009-UD",
     items: [
-      { name: "XL6009-UD, already set to 6.0 V", qty: 1 },
+      { name: "XL6009-UD, already set to 12.0 V", qty: 1 },
       { name: "M 2,5 x 6 DF screw, M2.5 × 6", qty: 2 },
-      { name: "1000 µF / 10 V low-ESR capacitor", qty: 1 },
+      { name: "1000 µF / 16 V low-ESR capacitor", qty: 1 },
     ],
     instructions: [
       "Find the two short standoffs in the front corner on the switch side, between the battery and the sensor slot.",
       "Set the XL6009-UD on them, component side up, with its IN pads toward the side wall and its OUT pads toward the middle. Its two corner holes sit over the standoffs.",
       "Drive an M2.5 × 6 screw through each hole into its standoff. The plastic cuts its own thread, so stop as soon as the board is held.",
-      "Lay the capacitor on its side, behind the motor on the switch side. Its leads get soldered across the driver's motor supply (VM and GND) in the wiring step, so keep them close to the driver.",
+      "Lay the capacitor on its side, in front of the motor on the switch side, between it and the battery. Its leads get soldered across the driver's motor supply (VM and GND) in the wiring step, so keep them close to the driver.",
     ],
     tip: "The capacitor has no printed holder yet. Once the wiring holds it in place, check it can't touch the wheels or the motor cans.",
   },
@@ -312,15 +312,17 @@ export const STEPS: readonly Step[] = [
     title: "Screw on the ball caster",
     label: "Ball caster",
     items: [
-      { name: "BCASTER-15-10K ball caster", qty: 1 },
-      { name: "M 4 x 8 DBKNY socket head screw, M4 × 8", qty: 2 },
+      { name: "GG-KUB-30-B ball transfer unit, Ø30 ball", qty: 1 },
+      { name: "Printed caster spacer, 1.7 mm", qty: 1 },
+      { name: "M4 screw (length to be confirmed)", qty: 3 },
     ],
     instructions: [
       "Turn the chassis upside down on a soft cloth.",
-      "Line up the caster's two holes with the M4 inserts near the front.",
-      "Screw it on with the two M4 × 8 screws.",
+      "Lay the spacer over the round opening near the front, its three holes over the M4 inserts.",
+      "Set the caster on it, ball facing up, its cup through the opening and its three holes over the inserts.",
+      "Screw it on with the three M4 screws.",
     ],
-    tip: "The caster comes with its own screws and nuts. You don't need them here; the inserts replace the nuts.",
+    tip: "The screw length depends on the caster flange's sheet thickness, which still has to be measured: the screws pass through the flange and the 1.7 mm spacer into the 6 mm inserts.",
   },
   {
     id: "wire-base",
@@ -338,7 +340,7 @@ export const STEPS: readonly Step[] = [
       "Wire the XL6009-UD's OUT+ to the driver's VM and its OUT− to the driver's GND, and solder the capacitor across VM and GND close to the driver. The driver's GND never goes to a Pi GND pin.",
       "Plug in both encoder cables and wire the motors to the driver outputs.",
       "Leave the signal wires that go to the Pi long enough to reach up into the upper shell.",
-      "With the switch on, check both rails with a multimeter (5.1 V and 6.0 V), then switch off again.",
+      "With the switch on, check both rails with a multimeter (5.1 V and 12.0 V), then switch off again.",
     ],
     caution:
       "The pin map hasn't been verified on a robot yet. Check every connection against each module's pinout before you power up.",

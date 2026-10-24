@@ -17,10 +17,13 @@ export const NAV: readonly NavItem[] = [
 ];
 
 /** Sub-pages, linked from the header. Paths end in "/" so relative assets resolve on a hard reload. */
-export const GUIDES: readonly { path: string; label: string }[] = [{ path: "/assembly", label: "Assembly" }];
+export const GUIDES: readonly { path: string; label: string }[] = [
+  { path: "/assembly", label: "Assembly" },
+  { path: "/simulation", label: "Simulation" },
+];
 
 export const FACTS: readonly { value: string; detail: string }[] = [
-  { value: "190 × 210 × 145 mm", detail: "about 1 kg" },
+  { value: "190 × 210 × 145 mm", detail: "about 1.5 kg" },
   { value: "Raspberry Pi 5", detail: "vision, speech, AI" },
   { value: "5 printed parts", detail: "no supports needed" },
   { value: "Local-first", detail: "moves safely offline" },
@@ -126,7 +129,7 @@ export const SPEC: readonly { term: string; detail: string }[] = [
   { term: "Audio", detail: "INMP441 I2S microphone, MAX98357 amplifier, 4 Ω / 3 W speaker" },
   {
     term: "Power",
-    detail: "4× 18650 Li-ion (2S2P, 6.8 Ah) with BMS, 5.1 V supply for the Pi, 6 V motor supply, USB-C charging",
+    detail: "4× 18650 Li-ion (2S2P, 6.8 Ah) with BMS, 5.1 V supply for the Pi, 12 V motor supply, USB-C charging",
   },
 ];
 
@@ -150,7 +153,7 @@ export const CHAPTERS: readonly { label: string; title: string; body: string }[]
   {
     label: "Stance",
     title: "A wide, stable triangle.",
-    body: "Two N20 wheels sit 15 mm behind centre and a ball caster sits far forward: a 141 mm track and 95 mm wheelbase.",
+    body: "Two N20 wheels sit 30 mm behind centre and a ball caster sits far forward: a 139 mm track and 97 mm wheelbase.",
   },
 ];
 

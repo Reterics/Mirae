@@ -10,6 +10,7 @@ gsap.registerPlugin(useGSAP, ScrollTrigger);
 
 // Loaded on demand, so the landing page bundle doesn't carry the guide.
 const Assembly = lazy(() => import("./pages/Assembly").then((m) => ({ default: m.Assembly })));
+const Simulation = lazy(() => import("./pages/Simulation").then((m) => ({ default: m.Simulation })));
 
 export function App() {
   return (
@@ -24,6 +25,14 @@ export function App() {
         }
       />
       <Route path="*" element={<Home />} />
+      <Route
+        path="simulation"
+        element={
+          <Suspense fallback={null}>
+            <Simulation />
+          </Suspense>
+        }
+      />
     </Routes>
   );
 }

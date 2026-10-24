@@ -12,9 +12,24 @@ def clock() -> FakeClock:
 
 @pytest.fixture
 def governor(clock: FakeClock) -> SafetyGovernor:
-    gov = SafetyGovernor(SafetyConfig(), clock)
+    # The other rules are tested without the ramp; the ramp has its own tests below.
+    gov = SafetyGovernor(SafetyConfig(ramp_per_s=None), clock)
     gov.update_range(2000.0)
     return gov
+
+
+@pytest.fixture
+def ramped(clock: FakeClock) -> SafetyGovernor:
+    gov = SafetyGovernor(SafetyConfig(), clock)  # default ramp: 1.5 duty per second
+    gov.update_range(2000.0)
+    return gov
+
+
+def _tick(gov: SafetyGovernor, clock: FakeClock, dt: float = 0.1) -> tuple[float, float]:
+    clock.advance(dt)
+    gov.update_range(2000.0)
+    cmd, _ = gov.output()
+    return cmd.left, cmd.right
 
 
 def test_idle_outputs_zero(governor: SafetyGovernor) -> None:
@@ -101,3 +116,53 @@ def test_estop_latches_until_released(governor: SafetyGovernor) -> None:
     governor.release()
     governor.command(0.3, 0.3)
     assert governor.output()[0].left == 0.3
+
+
+def test_ramp_limits_speeding_up(ramped: SafetyGovernor, clock: FakeClock) -> None:
+    ramped.command(0.6, 0.6, duration_s=5.0)
+    cmd, status = ramped.output()
+    assert (cmd.left, cmd.right) == (0.0, 0.0)
+    assert status.limit == "ramp"
+    assert _tick(ramped, clock) == pytest.approx((0.15, 0.15))
+    assert _tick(ramped, clock) == pytest.approx((0.3, 0.3))
+    _tick(ramped, clock)
+    assert _tick(ramped, clock) == pytest.approx((0.6, 0.6))
+    assert ramped.output()[1].limit is None
+
+
+def test_ramp_holds_across_resent_commands(ramped: SafetyGovernor, clock: FakeClock) -> None:
+    for expected in (0.15, 0.3, 0.45):
+        ramped.command(0.6, 0.6)  # a joystick client re-sending every tick
+        assert _tick(ramped, clock)[0] == pytest.approx(expected)
+
+
+def test_ramp_never_delays_a_stop(ramped: SafetyGovernor, clock: FakeClock) -> None:
+    ramped.command(0.6, 0.6, duration_s=5.0)
+    for _ in range(4):
+        _tick(ramped, clock)
+    ramped.command(0.2, 0.2, duration_s=5.0)
+    assert _tick(ramped, clock, 0.0) == pytest.approx((0.2, 0.2))  # slowing down: at once
+    ramped.estop()
+    assert _tick(ramped, clock, 0.0) == (0.0, 0.0)
+
+
+def test_ramp_restarts_after_deadman(ramped: SafetyGovernor, clock: FakeClock) -> None:
+    ramped.command(0.6, 0.6, duration_s=0.4)
+    for _ in range(4):
+        _tick(ramped, clock)
+    assert _tick(ramped, clock) == (0.0, 0.0)  # expired: zero at once
+    ramped.command(0.6, 0.6)
+    assert _tick(ramped, clock) == pytest.approx((0.15, 0.15))
+
+
+def test_ramp_reversal_starts_from_zero(ramped: SafetyGovernor, clock: FakeClock) -> None:
+    ramped.command(0.3, 0.3, duration_s=5.0)
+    _tick(ramped, clock)
+    _tick(ramped, clock)
+    ramped.command(-0.3, -0.3, duration_s=5.0)
+    assert _tick(ramped, clock) == pytest.approx((-0.15, -0.15))
+
+
+def test_ramp_step_is_capped_after_a_stall(ramped: SafetyGovernor, clock: FakeClock) -> None:
+    ramped.command(0.6, 0.6, duration_s=5.0)
+    assert _tick(ramped, clock, 2.0) == pytest.approx((0.15, 0.15))

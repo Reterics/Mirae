@@ -56,7 +56,13 @@ assets/brand/favicon.ico
 cad/renders/web/
 cad/renders/assembly/
 cad/renders/assembly-web/
+cad/renders/previews/
+cad/renders/wiring/
 cad/renders/mirae_*.png
+
+# Simulator authoring masters (house.blend, full-quality GLB). The site's
+# optimized exports live in site/public/media/house/ and are tracked there.
+/sim/
 
 # Blender autosave/backup copies
 *.blend[0-9]

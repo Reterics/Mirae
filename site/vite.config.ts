@@ -16,7 +16,7 @@ import { SITE } from "./src/site.ts";
  */
 const CSP = [
   "default-src 'none'",
-  "script-src 'self'",
+  "script-src 'self' 'wasm-unsafe-eval'", // Rapier's local WebAssembly physics module
   "style-src 'self'",
   "img-src 'self' blob:", // embedded GLB textures decoded through object URLs
   "media-src 'self'",

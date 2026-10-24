@@ -1,0 +1,1802 @@
+{
+ "description": "Two-room flat for the Mirae simulator. Units: metres, +Y up (glTF). Finished floor top at y = 0.",
+ "model": "house.glb",
+ "spawn": {
+  "position": [
+   2.0,
+   0.0,
+   -1.0
+  ],
+  "yaw": 3.141593,
+  "note": "Rotation about +Y; the robot drives along local +Z, so yaw = pi faces the sofa (glTF -Z)."
+ },
+ "rooms": [
+  {
+   "name": "living",
+   "min": [
+    0.0,
+    0.0,
+    -4.0
+   ],
+   "max": [
+    4.0,
+    2.65,
+    -0.0
+   ],
+   "area_m2": 16.0
+  },
+  {
+   "name": "bedroom",
+   "min": [
+    4.1,
+    0.0,
+    -4.0
+   ],
+   "max": [
+    7.1,
+    2.65,
+    -0.0
+   ],
+   "area_m2": 12.0
+  }
+ ],
+ "sources": {
+  "Threshold_Bedroom": "ADA 2010 Standards 404.2.5 + 303.3 maximum: 12.7 mm, 6.35 mm vertical then 1:2 bevel",
+  "Door_Entry_Threshold": "same profile as Threshold_Bedroom",
+  "Rug_Living": "IKEA HÖJET rug flatwoven 133x195 cm, thickness 7 mm",
+  "Rug_Bedroom": "IKEA STOENSE rug low pile 133x195 cm, thickness 18 mm (rigid here; the real pile compresses)"
+ },
+ "colliders": [
+  {
+   "name": "Door_Bedroom_Frame",
+   "surface": "solid",
+   "shape": "cuboid",
+   "center": [
+    4.05,
+    1.025,
+    -0.215
+   ],
+   "halfExtents": [
+    0.05,
+    1.025,
+    0.015
+   ]
+  },
+  {
+   "name": "Door_Bedroom_Frame",
+   "surface": "solid",
+   "shape": "cuboid",
+   "center": [
+    4.05,
+    1.025,
+    -0.985
+   ],
+   "halfExtents": [
+    0.05,
+    1.025,
+    0.015
+   ]
+  },
+  {
+   "name": "Door_Bedroom_Frame",
+   "surface": "solid",
+   "shape": "cuboid",
+   "center": [
+    3.994,
+    1.055,
+    -0.185
+   ],
+   "halfExtents": [
+    0.006,
+    1.055,
+    0.045
+   ]
+  },
+  {
+   "name": "Door_Bedroom_Frame",
+   "surface": "solid",
+   "shape": "cuboid",
+   "center": [
+    3.994,
+    1.055,
+    -1.015
+   ],
+   "halfExtents": [
+    0.006,
+    1.055,
+    0.045
+   ]
+  },
+  {
+   "name": "Door_Bedroom_Frame",
+   "surface": "solid",
+   "shape": "cuboid",
+   "center": [
+    4.106,
+    1.055,
+    -0.185
+   ],
+   "halfExtents": [
+    0.006,
+    1.055,
+    0.045
+   ]
+  },
+  {
+   "name": "Door_Bedroom_Frame",
+   "surface": "solid",
+   "shape": "cuboid",
+   "center": [
+    4.106,
+    1.055,
+    -1.015
+   ],
+   "halfExtents": [
+    0.006,
+    1.055,
+    0.045
+   ]
+  },
+  {
+   "name": "Door_Bedroom_Leaf",
+   "surface": "solid",
+   "shape": "cuboid",
+   "center": [
+    4.47,
+    1.018,
+    -0.25
+   ],
+   "halfExtents": [
+    0.37,
+    1.002,
+    0.02
+   ]
+  },
+  {
+   "name": "Door_Entry_Frame",
+   "surface": "solid",
+   "shape": "cuboid",
+   "center": [
+    3.015,
+    1.025,
+    -4.15
+   ],
+   "halfExtents": [
+    0.015,
+    1.025,
+    0.15
+   ]
+  },
+  {
+   "name": "Door_Entry_Frame",
+   "surface": "solid",
+   "shape": "cuboid",
+   "center": [
+    3.885,
+    1.025,
+    -4.15
+   ],
+   "halfExtents": [
+    0.015,
+    1.025,
+    0.15
+   ]
+  },
+  {
+   "name": "Door_Entry_Frame",
+   "surface": "solid",
+   "shape": "cuboid",
+   "center": [
+    2.985,
+    1.055,
+    -3.994
+   ],
+   "halfExtents": [
+    0.045,
+    1.055,
+    0.006
+   ]
+  },
+  {
+   "name": "Door_Entry_Frame",
+   "surface": "solid",
+   "shape": "cuboid",
+   "center": [
+    3.915,
+    1.055,
+    -3.994
+   ],
+   "halfExtents": [
+    0.045,
+    1.055,
+    0.006
+   ]
+  },
+  {
+   "name": "Door_Entry_Leaf",
+   "surface": "solid",
+   "shape": "cuboid",
+   "center": [
+    3.45,
+    1.0175,
+    -4.13
+   ],
+   "halfExtents": [
+    0.42,
+    1.0025,
+    0.03
+   ]
+  },
+  {
+   "name": "Door_Entry_Threshold",
+   "surface": "step",
+   "shape": "convex",
+   "points": [
+    [
+     3.0,
+     0.0,
+     -3.9873
+    ],
+    [
+     3.0,
+     0.00635,
+     -3.9873
+    ],
+    [
+     3.0,
+     0.0127,
+     -4.0
+    ],
+    [
+     3.0,
+     0.0127,
+     -4.3
+    ],
+    [
+     3.0,
+     0.00635,
+     -4.3127
+    ],
+    [
+     3.0,
+     0.0,
+     -4.3127
+    ],
+    [
+     3.9,
+     0.0,
+     -3.9873
+    ],
+    [
+     3.9,
+     0.00635,
+     -3.9873
+    ],
+    [
+     3.9,
+     0.0127,
+     -4.0
+    ],
+    [
+     3.9,
+     0.0127,
+     -4.3
+    ],
+    [
+     3.9,
+     0.00635,
+     -4.3127
+    ],
+    [
+     3.9,
+     0.0,
+     -4.3127
+    ]
+   ]
+  },
+  {
+   "name": "Floor_Bedroom",
+   "surface": "floor",
+   "shape": "cuboid",
+   "center": [
+    5.6,
+    -0.0075,
+    -2.0
+   ],
+   "halfExtents": [
+    1.5,
+    0.0075,
+    2.0
+   ]
+  },
+  {
+   "name": "Floor_Doorway",
+   "surface": "floor",
+   "shape": "cuboid",
+   "center": [
+    4.05,
+    -0.0075,
+    -0.6
+   ],
+   "halfExtents": [
+    0.05,
+    0.0075,
+    0.4
+   ]
+  },
+  {
+   "name": "Floor_LivingRoom",
+   "surface": "floor",
+   "shape": "cuboid",
+   "center": [
+    2.0,
+    -0.0075,
+    -2.0
+   ],
+   "halfExtents": [
+    2.0,
+    0.0075,
+    2.0
+   ]
+  },
+  {
+   "name": "Radiator_Bedroom_E",
+   "surface": "solid",
+   "shape": "cuboid",
+   "center": [
+    7.014,
+    0.42,
+    -1.9
+   ],
+   "halfExtents": [
+    0.011,
+    0.3,
+    0.5
+   ]
+  },
+  {
+   "name": "Radiator_Bedroom_E",
+   "surface": "solid",
+   "shape": "cuboid",
+   "center": [
+    6.969,
+    0.42,
+    -1.9
+   ],
+   "halfExtents": [
+    0.011,
+    0.3,
+    0.5
+   ]
+  },
+  {
+   "name": "Radiator_Living_S",
+   "surface": "solid",
+   "shape": "cuboid",
+   "center": [
+    3.2,
+    0.42,
+    -0.086
+   ],
+   "halfExtents": [
+    0.5,
+    0.3,
+    0.011
+   ]
+  },
+  {
+   "name": "Radiator_Living_S",
+   "surface": "solid",
+   "shape": "cuboid",
+   "center": [
+    3.2,
+    0.42,
+    -0.131
+   ],
+   "halfExtents": [
+    0.5,
+    0.3,
+    0.011
+   ]
+  },
+  {
+   "name": "Radiator_Living_W",
+   "surface": "solid",
+   "shape": "cuboid",
+   "center": [
+    0.086,
+    0.42,
+    -1.6
+   ],
+   "halfExtents": [
+    0.011,
+    0.3,
+    0.5
+   ]
+  },
+  {
+   "name": "Radiator_Living_W",
+   "surface": "solid",
+   "shape": "cuboid",
+   "center": [
+    0.131,
+    0.42,
+    -1.6
+   ],
+   "halfExtents": [
+    0.011,
+    0.3,
+    0.5
+   ]
+  },
+  {
+   "name": "Skirting_Bedroom",
+   "surface": "solid",
+   "shape": "cuboid",
+   "center": [
+    5.6,
+    0.04,
+    -0.0075
+   ],
+   "halfExtents": [
+    1.5,
+    0.04,
+    0.0075
+   ]
+  },
+  {
+   "name": "Skirting_Bedroom",
+   "surface": "solid",
+   "shape": "cuboid",
+   "center": [
+    5.6,
+    0.04,
+    -3.9925
+   ],
+   "halfExtents": [
+    1.5,
+    0.04,
+    0.0075
+   ]
+  },
+  {
+   "name": "Skirting_Bedroom",
+   "surface": "solid",
+   "shape": "cuboid",
+   "center": [
+    4.1075,
+    0.04,
+    -0.07
+   ],
+   "halfExtents": [
+    0.0075,
+    0.04,
+    0.07
+   ]
+  },
+  {
+   "name": "Skirting_Bedroom",
+   "surface": "solid",
+   "shape": "cuboid",
+   "center": [
+    4.1075,
+    0.04,
+    -2.53
+   ],
+   "halfExtents": [
+    0.0075,
+    0.04,
+    1.47
+   ]
+  },
+  {
+   "name": "Skirting_Bedroom",
+   "surface": "solid",
+   "shape": "cuboid",
+   "center": [
+    7.0925,
+    0.04,
+    -2.0
+   ],
+   "halfExtents": [
+    0.0075,
+    0.04,
+    2.0
+   ]
+  },
+  {
+   "name": "Skirting_Living",
+   "surface": "solid",
+   "shape": "cuboid",
+   "center": [
+    2.0,
+    0.04,
+    -0.0075
+   ],
+   "halfExtents": [
+    2.0,
+    0.04,
+    0.0075
+   ]
+  },
+  {
+   "name": "Skirting_Living",
+   "surface": "solid",
+   "shape": "cuboid",
+   "center": [
+    1.47,
+    0.04,
+    -3.9925
+   ],
+   "halfExtents": [
+    1.47,
+    0.04,
+    0.0075
+   ]
+  },
+  {
+   "name": "Skirting_Living",
+   "surface": "solid",
+   "shape": "cuboid",
+   "center": [
+    3.98,
+    0.04,
+    -3.9925
+   ],
+   "halfExtents": [
+    0.02,
+    0.04,
+    0.0075
+   ]
+  },
+  {
+   "name": "Skirting_Living",
+   "surface": "solid",
+   "shape": "cuboid",
+   "center": [
+    0.0075,
+    0.04,
+    -2.0
+   ],
+   "halfExtents": [
+    0.0075,
+    0.04,
+    2.0
+   ]
+  },
+  {
+   "name": "Skirting_Living",
+   "surface": "solid",
+   "shape": "cuboid",
+   "center": [
+    3.9925,
+    0.04,
+    -0.07
+   ],
+   "halfExtents": [
+    0.0075,
+    0.04,
+    0.07
+   ]
+  },
+  {
+   "name": "Skirting_Living",
+   "surface": "solid",
+   "shape": "cuboid",
+   "center": [
+    3.9925,
+    0.04,
+    -2.53
+   ],
+   "halfExtents": [
+    0.0075,
+    0.04,
+    1.47
+   ]
+  },
+  {
+   "name": "Threshold_Bedroom",
+   "surface": "step",
+   "shape": "convex",
+   "points": [
+    [
+     3.9873,
+     0.0,
+     -0.2
+    ],
+    [
+     3.9873,
+     0.00635,
+     -0.2
+    ],
+    [
+     4.0,
+     0.0127,
+     -0.2
+    ],
+    [
+     4.1,
+     0.0127,
+     -0.2
+    ],
+    [
+     4.1127,
+     0.00635,
+     -0.2
+    ],
+    [
+     4.1127,
+     0.0,
+     -0.2
+    ],
+    [
+     3.9873,
+     0.0,
+     -1.0
+    ],
+    [
+     3.9873,
+     0.00635,
+     -1.0
+    ],
+    [
+     4.0,
+     0.0127,
+     -1.0
+    ],
+    [
+     4.1,
+     0.0127,
+     -1.0
+    ],
+    [
+     4.1127,
+     0.00635,
+     -1.0
+    ],
+    [
+     4.1127,
+     0.0,
+     -1.0
+    ]
+   ]
+  },
+  {
+   "name": "Wall_East",
+   "surface": "solid",
+   "shape": "cuboid",
+   "center": [
+    7.25,
+    1.325,
+    -0.6
+   ],
+   "halfExtents": [
+    0.15,
+    1.325,
+    0.6
+   ]
+  },
+  {
+   "name": "Wall_East",
+   "surface": "solid",
+   "shape": "cuboid",
+   "center": [
+    7.25,
+    0.45,
+    -1.9
+   ],
+   "halfExtents": [
+    0.15,
+    0.45,
+    0.7
+   ]
+  },
+  {
+   "name": "Wall_East",
+   "surface": "solid",
+   "shape": "cuboid",
+   "center": [
+    7.25,
+    1.325,
+    -3.3
+   ],
+   "halfExtents": [
+    0.15,
+    1.325,
+    0.7
+   ]
+  },
+  {
+   "name": "Wall_Interior",
+   "surface": "solid",
+   "shape": "cuboid",
+   "center": [
+    4.05,
+    1.325,
+    -0.1
+   ],
+   "halfExtents": [
+    0.05,
+    1.325,
+    0.1
+   ]
+  },
+  {
+   "name": "Wall_Interior",
+   "surface": "solid",
+   "shape": "cuboid",
+   "center": [
+    4.05,
+    1.325,
+    -2.5
+   ],
+   "halfExtents": [
+    0.05,
+    1.325,
+    1.5
+   ]
+  },
+  {
+   "name": "Wall_North",
+   "surface": "solid",
+   "shape": "cuboid",
+   "center": [
+    1.35,
+    1.325,
+    -4.15
+   ],
+   "halfExtents": [
+    1.65,
+    1.325,
+    0.15
+   ]
+  },
+  {
+   "name": "Wall_North",
+   "surface": "solid",
+   "shape": "cuboid",
+   "center": [
+    5.65,
+    1.325,
+    -4.15
+   ],
+   "halfExtents": [
+    1.75,
+    1.325,
+    0.15
+   ]
+  },
+  {
+   "name": "Wall_South",
+   "surface": "solid",
+   "shape": "cuboid",
+   "center": [
+    1.15,
+    1.325,
+    0.15
+   ],
+   "halfExtents": [
+    1.45,
+    1.325,
+    0.15
+   ]
+  },
+  {
+   "name": "Wall_South",
+   "surface": "solid",
+   "shape": "cuboid",
+   "center": [
+    3.2,
+    0.45,
+    0.15
+   ],
+   "halfExtents": [
+    0.6,
+    0.45,
+    0.15
+   ]
+  },
+  {
+   "name": "Wall_South",
+   "surface": "solid",
+   "shape": "cuboid",
+   "center": [
+    5.6,
+    1.325,
+    0.15
+   ],
+   "halfExtents": [
+    1.8,
+    1.325,
+    0.15
+   ]
+  },
+  {
+   "name": "Wall_West",
+   "surface": "solid",
+   "shape": "cuboid",
+   "center": [
+    -0.15,
+    1.325,
+    -0.5
+   ],
+   "halfExtents": [
+    0.15,
+    1.325,
+    0.5
+   ]
+  },
+  {
+   "name": "Wall_West",
+   "surface": "solid",
+   "shape": "cuboid",
+   "center": [
+    -0.15,
+    0.45,
+    -1.6
+   ],
+   "halfExtents": [
+    0.15,
+    0.45,
+    0.6
+   ]
+  },
+  {
+   "name": "Wall_West",
+   "surface": "solid",
+   "shape": "cuboid",
+   "center": [
+    -0.15,
+    1.325,
+    -3.1
+   ],
+   "halfExtents": [
+    0.15,
+    1.325,
+    0.9
+   ]
+  },
+  {
+   "name": "Armchair_Frame",
+   "surface": "solid",
+   "shape": "cuboid",
+   "center": [
+    0.52,
+    0.275,
+    -2.6
+   ],
+   "halfExtents": [
+    0.4,
+    0.125,
+    0.4
+   ]
+  },
+  {
+   "name": "Armchair_Legs",
+   "surface": "solid",
+   "shape": "cylinder",
+   "center": [
+    0.18,
+    0.075,
+    -2.94
+   ],
+   "halfHeight": 0.075,
+   "radius": 0.022
+  },
+  {
+   "name": "Armchair_Legs",
+   "surface": "solid",
+   "shape": "cylinder",
+   "center": [
+    0.18,
+    0.075,
+    -2.26
+   ],
+   "halfHeight": 0.075,
+   "radius": 0.022
+  },
+  {
+   "name": "Armchair_Legs",
+   "surface": "solid",
+   "shape": "cylinder",
+   "center": [
+    0.86,
+    0.075,
+    -2.94
+   ],
+   "halfHeight": 0.075,
+   "radius": 0.022
+  },
+  {
+   "name": "Armchair_Legs",
+   "surface": "solid",
+   "shape": "cylinder",
+   "center": [
+    0.86,
+    0.075,
+    -2.26
+   ],
+   "halfHeight": 0.075,
+   "radius": 0.022
+  },
+  {
+   "name": "Bed_Duvet",
+   "surface": "solid",
+   "shape": "cuboid",
+   "center": [
+    5.6,
+    0.45,
+    -2.615
+   ],
+   "halfExtents": [
+    0.83,
+    0.15,
+    0.715
+   ]
+  },
+  {
+   "name": "Bed_Frame",
+   "surface": "solid",
+   "shape": "cuboid",
+   "center": [
+    5.6,
+    0.21,
+    -2.89
+   ],
+   "halfExtents": [
+    0.85,
+    0.11,
+    1.01
+   ]
+  },
+  {
+   "name": "Bed_Headboard",
+   "surface": "solid",
+   "shape": "cuboid",
+   "center": [
+    5.6,
+    0.55,
+    -3.94
+   ],
+   "halfExtents": [
+    0.87,
+    0.55,
+    0.04
+   ]
+  },
+  {
+   "name": "Bed_Legs",
+   "surface": "solid",
+   "shape": "cuboid",
+   "center": [
+    4.81,
+    0.05,
+    -1.94
+   ],
+   "halfExtents": [
+    0.03,
+    0.05,
+    0.03
+   ]
+  },
+  {
+   "name": "Bed_Legs",
+   "surface": "solid",
+   "shape": "cuboid",
+   "center": [
+    4.81,
+    0.05,
+    -3.84
+   ],
+   "halfExtents": [
+    0.03,
+    0.05,
+    0.03
+   ]
+  },
+  {
+   "name": "Bed_Legs",
+   "surface": "solid",
+   "shape": "cuboid",
+   "center": [
+    6.39,
+    0.05,
+    -1.94
+   ],
+   "halfExtents": [
+    0.03,
+    0.05,
+    0.03
+   ]
+  },
+  {
+   "name": "Bed_Legs",
+   "surface": "solid",
+   "shape": "cuboid",
+   "center": [
+    6.39,
+    0.05,
+    -3.84
+   ],
+   "halfExtents": [
+    0.03,
+    0.05,
+    0.03
+   ]
+  },
+  {
+   "name": "Bookshelf",
+   "surface": "solid",
+   "shape": "cuboid",
+   "center": [
+    0.17,
+    0.9,
+    -0.06
+   ],
+   "halfExtents": [
+    0.15,
+    0.9,
+    0.01
+   ]
+  },
+  {
+   "name": "Bookshelf",
+   "surface": "solid",
+   "shape": "cuboid",
+   "center": [
+    0.17,
+    0.9,
+    -0.84
+   ],
+   "halfExtents": [
+    0.15,
+    0.9,
+    0.01
+   ]
+  },
+  {
+   "name": "Bookshelf",
+   "surface": "solid",
+   "shape": "cuboid",
+   "center": [
+    0.03,
+    0.9,
+    -0.45
+   ],
+   "halfExtents": [
+    0.01,
+    0.9,
+    0.4
+   ]
+  },
+  {
+   "name": "Bookshelf",
+   "surface": "solid",
+   "shape": "cuboid",
+   "center": [
+    0.17,
+    0.01,
+    -0.45
+   ],
+   "halfExtents": [
+    0.15,
+    0.01,
+    0.4
+   ]
+  },
+  {
+   "name": "Bookshelf",
+   "surface": "solid",
+   "shape": "cuboid",
+   "center": [
+    0.17,
+    0.09,
+    -0.45
+   ],
+   "halfExtents": [
+    0.15,
+    0.01,
+    0.4
+   ]
+  },
+  {
+   "name": "Chair_Dining_N_Legs",
+   "surface": "solid",
+   "shape": "cylinder",
+   "center": [
+    3.39,
+    0.225,
+    -2.43
+   ],
+   "halfHeight": 0.225,
+   "radius": 0.012
+  },
+  {
+   "name": "Chair_Dining_N_Legs",
+   "surface": "solid",
+   "shape": "cylinder",
+   "center": [
+    3.01,
+    0.225,
+    -2.43
+   ],
+   "halfHeight": 0.225,
+   "radius": 0.012
+  },
+  {
+   "name": "Chair_Dining_N_Legs",
+   "surface": "solid",
+   "shape": "cylinder",
+   "center": [
+    3.39,
+    0.425,
+    -2.81
+   ],
+   "halfHeight": 0.425,
+   "radius": 0.012
+  },
+  {
+   "name": "Chair_Dining_N_Legs",
+   "surface": "solid",
+   "shape": "cylinder",
+   "center": [
+    3.01,
+    0.425,
+    -2.81
+   ],
+   "halfHeight": 0.425,
+   "radius": 0.012
+  },
+  {
+   "name": "Chair_Dining_S_Legs",
+   "surface": "solid",
+   "shape": "cylinder",
+   "center": [
+    3.39,
+    0.425,
+    -1.19
+   ],
+   "halfHeight": 0.425,
+   "radius": 0.012
+  },
+  {
+   "name": "Chair_Dining_S_Legs",
+   "surface": "solid",
+   "shape": "cylinder",
+   "center": [
+    3.01,
+    0.425,
+    -1.19
+   ],
+   "halfHeight": 0.425,
+   "radius": 0.012
+  },
+  {
+   "name": "Chair_Dining_S_Legs",
+   "surface": "solid",
+   "shape": "cylinder",
+   "center": [
+    3.39,
+    0.225,
+    -1.57
+   ],
+   "halfHeight": 0.225,
+   "radius": 0.012
+  },
+  {
+   "name": "Chair_Dining_S_Legs",
+   "surface": "solid",
+   "shape": "cylinder",
+   "center": [
+    3.01,
+    0.225,
+    -1.57
+   ],
+   "halfHeight": 0.225,
+   "radius": 0.012
+  },
+  {
+   "name": "CoffeeTable",
+   "surface": "solid",
+   "shape": "cuboid",
+   "center": [
+    1.19,
+    0.21,
+    -1.94
+   ],
+   "halfExtents": [
+    0.02,
+    0.21,
+    0.02
+   ]
+  },
+  {
+   "name": "CoffeeTable",
+   "surface": "solid",
+   "shape": "cuboid",
+   "center": [
+    1.19,
+    0.21,
+    -2.46
+   ],
+   "halfExtents": [
+    0.02,
+    0.21,
+    0.02
+   ]
+  },
+  {
+   "name": "CoffeeTable",
+   "surface": "solid",
+   "shape": "cuboid",
+   "center": [
+    2.21,
+    0.21,
+    -1.94
+   ],
+   "halfExtents": [
+    0.02,
+    0.21,
+    0.02
+   ]
+  },
+  {
+   "name": "CoffeeTable",
+   "surface": "solid",
+   "shape": "cuboid",
+   "center": [
+    2.21,
+    0.21,
+    -2.46
+   ],
+   "halfExtents": [
+    0.02,
+    0.21,
+    0.02
+   ]
+  },
+  {
+   "name": "DiningTable",
+   "surface": "solid",
+   "shape": "cylinder",
+   "center": [
+    3.00205,
+    0.36,
+    -2.19803
+   ],
+   "halfHeight": 0.36,
+   "radius": 0.018
+  },
+  {
+   "name": "DiningTable",
+   "surface": "solid",
+   "shape": "cylinder",
+   "center": [
+    3.00201,
+    0.36,
+    -1.80201
+   ],
+   "halfHeight": 0.36,
+   "radius": 0.018
+  },
+  {
+   "name": "DiningTable",
+   "surface": "solid",
+   "shape": "cylinder",
+   "center": [
+    3.39807,
+    0.36,
+    -2.19791
+   ],
+   "halfHeight": 0.36,
+   "radius": 0.018
+  },
+  {
+   "name": "DiningTable",
+   "surface": "solid",
+   "shape": "cylinder",
+   "center": [
+    3.39803,
+    0.36,
+    -1.80205
+   ],
+   "halfHeight": 0.36,
+   "radius": 0.018
+  },
+  {
+   "name": "FloorLamp",
+   "surface": "solid",
+   "shape": "cylinder",
+   "center": [
+    0.32,
+    0.0125,
+    -3.7
+   ],
+   "halfHeight": 0.0125,
+   "radius": 0.14
+  },
+  {
+   "name": "FloorLamp",
+   "surface": "solid",
+   "shape": "cylinder",
+   "center": [
+    0.32,
+    0.7625,
+    -3.7
+   ],
+   "halfHeight": 0.7375,
+   "radius": 0.011
+  },
+  {
+   "name": "LaundryBasket",
+   "surface": "solid",
+   "shape": "cylinder",
+   "center": [
+    4.42,
+    0.275,
+    -1.55
+   ],
+   "halfHeight": 0.275,
+   "radius": 0.2
+  },
+  {
+   "name": "Nightstand_L",
+   "surface": "solid",
+   "shape": "cuboid",
+   "center": [
+    4.475,
+    0.35,
+    -3.75
+   ],
+   "halfExtents": [
+    0.225,
+    0.2,
+    0.2
+   ]
+  },
+  {
+   "name": "Nightstand_L_Legs",
+   "surface": "solid",
+   "shape": "cylinder",
+   "center": [
+    4.66,
+    0.075,
+    -3.59
+   ],
+   "halfHeight": 0.075,
+   "radius": 0.012
+  },
+  {
+   "name": "Nightstand_L_Legs",
+   "surface": "solid",
+   "shape": "cylinder",
+   "center": [
+    4.29,
+    0.075,
+    -3.59
+   ],
+   "halfHeight": 0.075,
+   "radius": 0.012
+  },
+  {
+   "name": "Nightstand_L_Legs",
+   "surface": "solid",
+   "shape": "cylinder",
+   "center": [
+    4.66,
+    0.075,
+    -3.91
+   ],
+   "halfHeight": 0.075,
+   "radius": 0.012
+  },
+  {
+   "name": "Nightstand_L_Legs",
+   "surface": "solid",
+   "shape": "cylinder",
+   "center": [
+    4.29,
+    0.075,
+    -3.91
+   ],
+   "halfHeight": 0.075,
+   "radius": 0.012
+  },
+  {
+   "name": "Nightstand_R",
+   "surface": "solid",
+   "shape": "cuboid",
+   "center": [
+    6.725,
+    0.35,
+    -3.75
+   ],
+   "halfExtents": [
+    0.225,
+    0.2,
+    0.2
+   ]
+  },
+  {
+   "name": "Nightstand_R_Legs",
+   "surface": "solid",
+   "shape": "cylinder",
+   "center": [
+    6.91,
+    0.075,
+    -3.59
+   ],
+   "halfHeight": 0.075,
+   "radius": 0.012
+  },
+  {
+   "name": "Nightstand_R_Legs",
+   "surface": "solid",
+   "shape": "cylinder",
+   "center": [
+    6.54,
+    0.075,
+    -3.59
+   ],
+   "halfHeight": 0.075,
+   "radius": 0.012
+  },
+  {
+   "name": "Nightstand_R_Legs",
+   "surface": "solid",
+   "shape": "cylinder",
+   "center": [
+    6.91,
+    0.075,
+    -3.91
+   ],
+   "halfHeight": 0.075,
+   "radius": 0.012
+  },
+  {
+   "name": "Nightstand_R_Legs",
+   "surface": "solid",
+   "shape": "cylinder",
+   "center": [
+    6.54,
+    0.075,
+    -3.91
+   ],
+   "halfHeight": 0.075,
+   "radius": 0.012
+  },
+  {
+   "name": "Rug_Bedroom",
+   "surface": "rug",
+   "shape": "cuboid",
+   "center": [
+    5.675,
+    0.009,
+    -1.245
+   ],
+   "halfExtents": [
+    0.975,
+    0.009,
+    0.665
+   ]
+  },
+  {
+   "name": "Rug_Living",
+   "surface": "rug",
+   "shape": "cuboid",
+   "center": [
+    1.7,
+    0.0035,
+    -2.2
+   ],
+   "halfExtents": [
+    0.975,
+    0.0035,
+    0.665
+   ]
+  },
+  {
+   "name": "Sofa_Frame",
+   "surface": "solid",
+   "shape": "cuboid",
+   "center": [
+    1.7,
+    0.27,
+    -3.53
+   ],
+   "halfExtents": [
+    1.1,
+    0.15,
+    0.45
+   ]
+  },
+  {
+   "name": "Sofa_Legs",
+   "surface": "solid",
+   "shape": "cylinder",
+   "center": [
+    0.66,
+    0.06,
+    -3.92
+   ],
+   "halfHeight": 0.06,
+   "radius": 0.022
+  },
+  {
+   "name": "Sofa_Legs",
+   "surface": "solid",
+   "shape": "cylinder",
+   "center": [
+    0.66,
+    0.06,
+    -3.14
+   ],
+   "halfHeight": 0.06,
+   "radius": 0.022
+  },
+  {
+   "name": "Sofa_Legs",
+   "surface": "solid",
+   "shape": "cylinder",
+   "center": [
+    2.74,
+    0.06,
+    -3.92
+   ],
+   "halfHeight": 0.06,
+   "radius": 0.022
+  },
+  {
+   "name": "Sofa_Legs",
+   "surface": "solid",
+   "shape": "cylinder",
+   "center": [
+    2.74,
+    0.06,
+    -3.14
+   ],
+   "halfHeight": 0.06,
+   "radius": 0.022
+  },
+  {
+   "name": "TVStand",
+   "surface": "solid",
+   "shape": "cuboid",
+   "center": [
+    1.7,
+    0.33,
+    -0.23
+   ],
+   "halfExtents": [
+    0.8,
+    0.19,
+    0.2
+   ]
+  },
+  {
+   "name": "TVStand_Doors",
+   "surface": "solid",
+   "shape": "cuboid",
+   "center": [
+    1.11,
+    0.33,
+    -0.4325
+   ],
+   "halfExtents": [
+    0.19,
+    0.16,
+    0.0025
+   ]
+  },
+  {
+   "name": "TVStand_Doors",
+   "surface": "solid",
+   "shape": "cuboid",
+   "center": [
+    1.51,
+    0.33,
+    -0.4325
+   ],
+   "halfExtents": [
+    0.19,
+    0.16,
+    0.0025
+   ]
+  },
+  {
+   "name": "TVStand_Doors",
+   "surface": "solid",
+   "shape": "cuboid",
+   "center": [
+    1.91,
+    0.33,
+    -0.4325
+   ],
+   "halfExtents": [
+    0.19,
+    0.16,
+    0.0025
+   ]
+  },
+  {
+   "name": "TVStand_Doors",
+   "surface": "solid",
+   "shape": "cuboid",
+   "center": [
+    2.31,
+    0.33,
+    -0.4325
+   ],
+   "halfExtents": [
+    0.19,
+    0.16,
+    0.0025
+   ]
+  },
+  {
+   "name": "TVStand_Legs",
+   "surface": "solid",
+   "shape": "cylinder",
+   "center": [
+    2.44,
+    0.07,
+    -0.08
+   ],
+   "halfHeight": 0.07,
+   "radius": 0.012
+  },
+  {
+   "name": "TVStand_Legs",
+   "surface": "solid",
+   "shape": "cylinder",
+   "center": [
+    0.96,
+    0.07,
+    -0.08
+   ],
+   "halfHeight": 0.07,
+   "radius": 0.012
+  },
+  {
+   "name": "TVStand_Legs",
+   "surface": "solid",
+   "shape": "cylinder",
+   "center": [
+    2.44,
+    0.07,
+    -0.38
+   ],
+   "halfHeight": 0.07,
+   "radius": 0.012
+  },
+  {
+   "name": "TVStand_Legs",
+   "surface": "solid",
+   "shape": "cylinder",
+   "center": [
+    0.96,
+    0.07,
+    -0.38
+   ],
+   "halfHeight": 0.07,
+   "radius": 0.012
+  },
+  {
+   "name": "Wardrobe",
+   "surface": "solid",
+   "shape": "cuboid",
+   "center": [
+    6.2,
+    1.075,
+    -0.32
+   ],
+   "halfExtents": [
+    0.75,
+    1.025,
+    0.3
+   ]
+  },
+  {
+   "name": "Wardrobe",
+   "surface": "solid",
+   "shape": "cuboid",
+   "center": [
+    6.2,
+    0.025,
+    -0.32
+   ],
+   "halfExtents": [
+    0.71,
+    0.025,
+    0.26
+   ]
+  },
+  {
+   "name": "Wardrobe_Doors",
+   "surface": "solid",
+   "shape": "cuboid",
+   "center": [
+    5.8265,
+    1.075,
+    -0.629
+   ],
+   "halfExtents": [
+    0.3715,
+    1.015,
+    0.009
+   ]
+  },
+  {
+   "name": "Wardrobe_Doors",
+   "surface": "solid",
+   "shape": "cuboid",
+   "center": [
+    6.5735,
+    1.075,
+    -0.629
+   ],
+   "halfExtents": [
+    0.3715,
+    1.015,
+    0.009
+   ]
+  },
+  {
+   "name": "Curtains_Bedroom",
+   "surface": "solid",
+   "shape": "cuboid",
+   "center": [
+    7.03,
+    1.25,
+    -1.05
+   ],
+   "halfExtents": [
+    0.05,
+    1.2,
+    0.2
+   ]
+  },
+  {
+   "name": "Curtains_Bedroom",
+   "surface": "solid",
+   "shape": "cuboid",
+   "center": [
+    7.03,
+    1.25,
+    -2.75
+   ],
+   "halfExtents": [
+    0.05,
+    1.2,
+    0.2
+   ]
+  },
+  {
+   "name": "Curtains_Living",
+   "surface": "solid",
+   "shape": "cuboid",
+   "center": [
+    0.06,
+    1.25,
+    -2.27
+   ],
+   "halfExtents": [
+    0.04,
+    1.2,
+    0.07
+   ]
+  },
+  {
+   "name": "Plant_Pot_Living",
+   "surface": "solid",
+   "shape": "cylinder",
+   "center": [
+    3.72,
+    0.19,
+    -1.3
+   ],
+   "halfHeight": 0.19,
+   "radius": 0.18
+  }
+ ]
+}

@@ -48,7 +48,7 @@ def test_controller_drives_sim_forward() -> None:
     controller = DriveController(drive_cfg, hardware.motors, hardware.encoders, governor)
 
     controller.step()
-    for _ in range(10):
+    for _ in range(25):  # 0.5 s: past the default ramp to 0.5 (1.5 per second)
         governor.update_range(world.range_mm)
         governor.command(0.5, 0.5)
         clock.advance(0.02)

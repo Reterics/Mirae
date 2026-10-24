@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <hestore>
-  <item cid="100.428.86" quantity="2"><![CDATA[N20E-06-100 (Mini áttételes motor, enkóderrel, 6V DC, 100RPM)]]></item>
+  <item cid="100.429.00" quantity="2"><![CDATA[N20E-12-100 (Mini áttételes motor, enkóderrel, 12V DC, 100RPM)]]></item>
   <item cid="100.427.70" quantity="2"><![CDATA[N20-3PI-WHL (Kerék, N20 áttételes motorhoz, 42mm átmérő, 3PI miniQ)]]></item>
   <item cid="100.479.92" quantity="1"><![CDATA[TB6612FNG-M (TB6612FNG alapú dual DC motor meghajtó modul)]]></item>
-  <item cid="100.284.94" quantity="1"><![CDATA[1000uF/10V LOW ESR (Kondenzátor, elektrolit, alacsony impendanciájú, 1000µF, 10V, 5mm, hosszú élettartam, Ø10x16mm, -40...105°C)]]></item>
+  <item cid="100.499.33" quantity="1"><![CDATA[1000uF/16V LOW ESR 10x13 (Kondenzátor, elektrolit, alacsony impendanciájú, 1000µF, 16V, 5mm, Ø10x13mm, -40...105°C)]]></item>
   <item cid="100.357.20" quantity="1"><![CDATA[RC-40-20/MF (Szalagkábel csatlakozóval, 20cm, 40p, male-female (jumper))]]></item>
   <item cid="100.392.82" quantity="1"><![CDATA[RPI-RIB40-C (40 pólusú szalagkábel csatlakozó Raspberry PI-hez, 20 cm, színes)]]></item>
   <item cid="100.374.53" quantity="1"><![CDATA[RPI-TCOBBLER (T-csatlakozó Raspberry PI-hez, próba panelhez)]]></item>
@@ -15,14 +15,12 @@
   <item cid="100.468.18" quantity="1"><![CDATA[HX-2S-JH20 (BMS modul, 2S, 7.4V, 10A, balanszerrel)]]></item>
   <item cid="100.519.10" quantity="1"><![CDATA[USBC-2S-LI-BOOST (2S Li-ion USB-C boost charger, 5 V input, 0.9 A default)]]></item>
   <item cid="100.431.83" quantity="1"><![CDATA[SZ-08CV (DC-DC step-up/down converter, 5–30 V input, set to 5.1 V)]]></item>
-  <item cid="100.486.09" quantity="1"><![CDATA[XL6009-UD (DC-DC step-up/step-down converter, 5–30 V input, 1.4–30 V output, max. 4 A, set to 6.0 V for motors)]]></item>
-  <item cid="100.516.66" quantity="1"><![CDATA[BCASTER-15-10K (Golyós fém támasztó görgő (ball caster), 15.875mm golyóátmérő, max. 10kg terhelhetőség)]]></item>
+  <item cid="100.486.09" quantity="1"><![CDATA[XL6009-UD (DC-DC step-up/step-down converter, 5–30 V input, 1.4–30 V output, max. 4 A, set to 12.0 V for motors)]]></item>
   <item cid="100.266.00" quantity="1"><![CDATA[SL 19123 (Slide switch, SPDT, 6 A / 28 V DC, main power switch on the BMS P+ load output)]]></item>
   <item cid="100.423.96" quantity="8"><![CDATA[M3-INSERT-6 (Heat-set insert, M3 × 4.6 × 6.0 (4 join + 4 SZ-08CV standoffs))]]></item>
-  <item cid="100.511.40" quantity="2"><![CDATA[M4-INSERT-6X6 (Heat-set insert, M4 × 6.0 × 6.0 (caster))]]></item>
+  <item cid="100.511.40" quantity="3"><![CDATA[M4-INSERT-6X6 (Heat-set insert, M4 × 6.0 × 6.0 (caster))]]></item>
   <item cid="100.351.72" quantity="4"><![CDATA[M 3 x 8 DBKNY (Socket head screw, M3 × 8 (joins the upper shell to the base))]]></item>
   <item cid="100.361.37" quantity="4"><![CDATA[M 3 x 6 DBKNY (Socket head screw, M3 × 6 (SZ-08CV))]]></item>
-  <item cid="100.370.21" quantity="2"><![CDATA[M 4 x 8 DBKNY (Socket head screw, M4 × 8 (caster))]]></item>
   <item cid="100.281.64" quantity="6"><![CDATA[M 2,5 x 6 DF (Screw, M2.5 × 6 (VL53L1X board, XL6009-UD))]]></item>
   <item cid="100.344.09" quantity="4"><![CDATA[RI M2,5x15 BB (Spacer, M2.5 female–female, hex, 15 mm (lifts the Pi over the AI HAT+ 2 space))]]></item>
   <item cid="100.284.06" quantity="4"><![CDATA[M 2,5 x 10 DF (Screw, M2.5 × 10 (from under the tray, through the standoffs and the HAT into the spacers))]]></item>

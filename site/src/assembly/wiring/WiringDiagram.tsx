@@ -126,7 +126,7 @@ const PARTS: Record<string, PartDef> = {
   },
   "XL6009-UD": {
     ref: "U7 · XL6009-UD",
-    value: "converter, set to 6.0 V",
+    value: "converter, set to 12.0 V",
     x: COL2,
     y: 0,
     w: 110,
@@ -595,7 +595,7 @@ export function WiringDiagram({ className }: { className: string }) {
       {/* C1: + lead and − lead from the channel edge */}
       <Wire color={leadColor("Capacitor|+|0")} d={`M${COL2 - PIN} ${CAP.plus} H${CAP.x} V${CAP.plus + 22}`} />
       <Wire color={leadColor("Capacitor|−|0")} d={`M${COL2 - PIN} ${CAP.minus} H${CAP.x} V${CAP.minus - 22}`} />
-      <PolarCap x={CAP.x} top={CAP.plus + 22} bottom={CAP.minus - 22} label="C1 · 1000 µF, at the driver" />
+      <PolarCap x={CAP.x} top={CAP.plus + 22} bottom={CAP.minus - 22} label="C1 · 1000 µF / 16 V, at the driver" />
 
       {/* LS1: the speaker on the amplifier's screw terminal */}
       <g>

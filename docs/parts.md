@@ -21,11 +21,11 @@ The tables link directly to vendor product pages, drawings and datasheets. Check
 
 | Part | Real size (mm) | Source | CAD reserves | Status |
 |---|---|---|---|---|
-| [N20E-06-100](https://www.hestore.hu/prod_10042886.html) motor + encoder | 26 × 10 × 12 body, Ø3 D-shaft (H, confirmed). The encoder board is 14.5 × 12 (H-doc). The 6-pin plug and cable leave from the back. | H, [drawing](https://www.hestore.hu/prod_getfile.php?id=13732) | 26 + 8 encoder, 15 × 15 | ✅ |
+| [N20E-12-100](https://www.hestore.hu/prod_10042900.html) motor + encoder | 26 × 10 × 12 body, Ø3 D-shaft (H). The encoder board is 14.5 × 12 (H-doc). The 6-pin plug and cable leave from the back. 12 V DC, 100 RPM, rated torque 196 mN·m, 50 mA operating / 100 mA max (H). Same drawing and pinout as the N20E-06-100 it replaces (39 mN·m at 6 V). Gear ratio, encoder PPR and stall current aren't published. | H, [drawing](https://www.hestore.hu/prod_getfile.php?id=13746) | 26 + 8 encoder, 15 × 15 | ✅ |
 | [N20-3PI-WHL](https://www.hestore.hu/prod_10042770.html) wheel | Ø42 × 18, D-bore press fit | H | 43 × 19 envelope | ✅ |
-| [BCASTER-15-10K](https://www.hestore.hu/prod_10051666.html) ball caster | 48.3 × 32.5 × 20, ball Ø15.875, 2 × Ø4.1 holes 39 apart. Screws and nuts included. | H | same | ✅ |
+| [GG-KUB-30-B](https://kerekaruhaz.hu/spd/308640/GG-KUB-30-B-peremes-sullyesztheto-rogzito-furatos) ball transfer unit (not from HESTORE) | Pressed galvanised steel housing, steel ball, 75 kg load (other). Vendor drawing: Ø71.8 flange, 3.3 overall flange height, Ø45.06 cup 16.7 deep behind it, 35 overall; Ø30 ball, its tip 15 beyond the flange face (18.3 beyond the flange's back), 11.7 beyond the pressed ring around it; 3 × Ø5 holes. The Ø60 bolt circle is scaled off the drawing. Flange sheet thickness: **TBD, measure**. | other, vendor drawing | as drawn, ball down, flange screwed under the floor through a 1.7 mm printed spacer (ball tip 20 below the underside); cup through a Ø46 floor hole; 3 M4 heat-set inserts on Ø8 bosses | ⚠️ measure the flange sheet thickness (sets the M4 screw length) and the bolt circle |
 | [TB6612FNG-M](https://www.hestore.hu/prod_10047992.html) motor driver (HW-166) | 20.5 × 20.5. Two loose 8-pin headers that **you solder**. Height with headers isn't published. | H | 20.5 × 20.5 × 10 | ⚠️ height: measure |
-| [1000 µF / 10 V](https://www.hestore.hu/prod_10028494.html) capacitor | Ø10 × 16, up to Ø10.5 × 17.5, 5 mm lead pitch | H, [series sheet](https://www.hestore.hu/prod_getfile.php?id=3447) | Ø10.5 × 17.5, lying beside the driver | ✅ |
+| [1000 µF / 16 V](https://www.hestore.hu/prod_10049933.html) capacitor | Ø10 × 13, 5 mm lead pitch, low ESR, 105 °C. Rated above the 12 V motor rail; the earlier 10 V part wasn't. No datasheet linked. | H | Ø10.5 × 17.5, lying behind the battery between the driver pocket and the switch-side encoder | ✅ |
 
 ## Power
 
@@ -36,10 +36,10 @@ The tables link directly to vendor product pages, drawings and datasheets. Check
 | [HX-2S-JH20](https://www.hestore.hu/prod_10046818.html) BMS | 47.5 × 24 × 3.6, solder pads | H | 50 × 27 × 6, flat on top of the pack | ✅ |
 | [USBC-2S-LI-BOOST](https://www.hestore.hu/prod_10051910.html) 2S USB-C charger | Dimensions not published. 5 V USB-C input, 0.9 A default charge current, 8.4 V default pack voltage. | H | temporary 35 × 22 × 6 on rails at the rear wall, USB-C port through a 13 × 8 slot | ⚠️ measure the received board |
 | [SZ-08CV](https://www.hestore.hu/prod_10043183.html) step-up/down converter | 60 × 50.5 × 20, screw terminals | H, [drawing](https://www.hestore.hu/prod_getfile.php?id=21097) | 63 × 54 × 23 with airflow, rear bay, on 4 × 7 mm M3 standoffs (holes 45 × 37, Ø3.2), floor vents underneath | ✅ |
-| [XL6009-UD](https://www.hestore.hu/prod_10048609.html) motor step-up/step-down converter | 49 × 24 × 13, 5–30 V input, 1.4–30 V output, max. 4 A (4 A only with heatsink and fan). Pads IN+, IN−, EN, OUT+, OUT−; EN left open keeps the output on. Set to 6.0 V. Replaces the DSN-1504-3A, whose output didn't suit. | H, [XL6009 datasheet](https://www.hestore.hu/prod_getfile.php?id=19505) | on two 4 mm printed standoffs (M2.5 self-tapping) in the front corner on the switch side, between the battery and the sensor mount; IN end toward the side wall, OUT end toward the centre. Holes Ø3.0, measured: 7.5 from the IN end and 3 from the rear edge, 7.5 from the OUT end and 3 from the front edge | ✅ holes measured |
+| [XL6009-UD](https://www.hestore.hu/prod_10048609.html) motor step-up/step-down converter | 49 × 24 × 13, 5–30 V input, 1.4–30 V output, max. 4 A (4 A only with heatsink and fan). Pads IN+, IN−, EN, OUT+, OUT−; EN left open keeps the output on. Set to 12.0 V. Replaces the DSN-1504-3A, whose output didn't suit. | H, [XL6009 datasheet](https://www.hestore.hu/prod_getfile.php?id=19505) | on two 4 mm printed standoffs (M2.5 self-tapping) in the front corner on the switch side, between the battery and the sensor mount; IN end toward the side wall, OUT end toward the centre. Holes Ø3.0, measured: 7.5 from the IN end and 3 from the rear edge, 7.5 from the OUT end and 3 from the front edge | ✅ holes measured |
 | [SL 19123](https://www.hestore.hu/prod_10026600.html) slide switch | Body 12.8 × 6.7 × 6.7, slider 3.8 wide, stands 4.65 off the body, 2.2 travel; legs leave the back; 6 A / 28 V DC | H, [drawing](https://www.hestore.hu/prod_getfile.php?id=1590) | pocket behind the rear wall, slider through a slot in a 1 mm recess (stands 2 mm proud) | ✅ |
 
-The battery is 4 × 18650 in a 2S2P configuration: 7.2 V nominal, 8.4 V fully charged, 6.8 Ah (~49 Wh). Charging is USB-C 5 V → USBC-2S-LI-BOOST → HX-2S-JH20 / battery pack. During operation, the protected pack feeds the SZ-08CV set to 5.1 V for the Raspberry Pi 5 / logic rail and the XL6009-UD set to 6.0 V for the TB6612 motor rail.
+The battery is 4 × 18650 in a 2S2P configuration: 7.2 V nominal, 8.4 V fully charged, 6.8 Ah (~49 Wh). Charging is USB-C 5 V → USBC-2S-LI-BOOST → HX-2S-JH20 / battery pack. During operation, the protected pack feeds the SZ-08CV set to 5.1 V for the Raspberry Pi 5 / logic rail and the XL6009-UD set to 12.0 V for the TB6612 motor rail.
 
 ## Compute, sensors, audio
 
@@ -59,3 +59,50 @@ The battery is 4 × 18650 in a 2S2P configuration: 7.2 V nominal, 8.4 V fully ch
 |---|---|---|---|---|
 | [RI M2,5x15 BB](https://www.hestore.hu/prod_10034409.html) spacer (×4, Pi) | M2.5 female–female, hex 5 AF, 15 long, nickel-plated brass (DREMEC). The page's spec table also says "Hosszúság 12": check the length you receive. | H | Ø5.77 (the hex's corners) × 15 between the HAT (or the tray standoffs) and the Pi case. Two of them stand 6 mm from the HAT heatsink's push pins, as on the Pi 5's own cooler: 0.3 mm at the hex corners, 0.7 across the flats. | ✅ (confirm length) |
 | [Neodymium magnet V5-2-N38](https://orodian.hu/termek/neodimium-hengermagnes-5x2-mm-n38) (×4, two pairs) | Ø5 × 2, N38, axially magnetised (poles on the flat faces), Ni-Cu-Ni coated, 0.43 kg pull on steel | orodian.hu | Ø5.2 × 2.1 pockets: one in each front column, one in each boss under the lid | ✅ |
+
+## Mass budget
+
+The masses behind the centre-of-mass check in `cad/blender/build_mirae.py`, which places each one at its part's position in the model. Basis:
+
+- **vendor**: published for this part
+- **maintainer**: value supplied by the maintainer
+- **verified equivalent**: published for a matching part with the same size and rating
+- **strong estimate**: published for a closely comparable board
+- **estimated**: no published value; weigh the part you have
+- **computed**: from the part's size and material
+- **volume**: printed part, from its STL volume × 1.24 g/cm³ (PLA) × 0.8 fill; your slicer's weight replaces it
+
+| Part | Qty | Each (g) | Total (g) | Basis |
+|---|---:|---:|---:|---|
+| top-cover | 1 | 181 | 181 | volume (182.7 cm³) |
+| pi-module | 1 | 206 | 206 | volume (207.8 cm³) |
+| chassis | 1 | 174 | 174 | volume (175.9 cm³) |
+| faceplate | 1 | 33 | 33 | volume (33.3 cm³) |
+| sensor-mount | 1 | 10 | 10 | volume (10.4 cm³) |
+| caster-spacer | 1 | 4 | 4 | volume (4.4 cm³) |
+| SZ-08CV, with its heatsinks | 1 | 220 | 220 | maintainer |
+| JOY-IT RB-AlucaseP5-09 | 1 | 205 | 205 | vendor |
+| Battery pack, complete (cells, spacers, nickel strip, BMS, its wires) | 1 | 205 | 205 | maintainer |
+| Raspberry Pi 5 board | 1 | 62 | 62 | maintainer |
+| GG-KUB-30-B ball transfer unit | 1 | 220 | 220 | maintainer (ball 111, housing 109) |
+| N20E-12-100 motor with encoder | 2 | 14 | 28 | strong estimate (same body as the 6 V version) |
+| N20-3PI-WHL wheel | 2 | 19.4 | 38.8 | verified equivalent |
+| XL6009-UD | 1 | 12 | 12 | strong estimate |
+| AI HAT+ 2 with heatsink (optional) | 1 | 35 | 35 | estimated (board alone: 19, verified) |
+| RI M2,5x15 BB spacer | 4 | 2.1 | 8.4 | computed |
+| Hook-and-loop strap | 2 | 5 | 10 | estimated |
+| Wiring harness | 1 | 30 | 30 | estimated |
+| Screws and heat-set inserts | 1 set | 12 | 12 | estimated |
+| 3525 speaker | 1 | 7 | 7 | verified equivalent |
+| USBC-2S-LI-BOOST charger | 1 | 5 | 5 | estimated |
+| Camera Module 3 NoIR + FFC | 1 | 5 | 5 | camera 4 (vendor) + 1 for the FFC |
+| TB6612FNG-M with headers | 1 | 3 | 3 | strong estimate |
+| 1000 µF / 16 V capacitor | 1 | 2 | 2 | strong estimate (a 10 × 16 part; this one is 10 × 13) |
+| SL 19123 switch | 1 | 1.7 | 1.7 | vendor (TME) |
+| Adafruit VL53L1X with header | 1 | 2 | 2 | vendor (1.8 bare) |
+| MAX98357-M with header and terminal | 1 | 2 | 2 | strong estimate |
+| INMP441-M | 1 | 2 | 2 | verified equivalent |
+| Magnet Ø5 × 2 N38 | 4 | 0.3 | 1.2 | computed |
+| **Total** | | | **≈ 1,727** | |
+
+With these masses the centre of mass sits 36 mm ahead of the axle and 60 mm above the ground, and the caster carries 37% of the weight (see the stance notes in the [enclosure guide](../cad/README.md#stance-and-stability)). The printed parts are the largest estimated share. With the printed parts anywhere from 60% fill to solid, the build's checks still pass (caster 36–38%, against the 40% limit).

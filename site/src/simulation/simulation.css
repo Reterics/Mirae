@@ -1,0 +1,451 @@
+.physics-page {
+  padding-top: var(--header-h);
+  height: 100dvh;
+  min-height: 720px;
+  display: flex;
+  flex-direction: column;
+}
+.physics-peripherals button {
+  font: 12px var(--font-sans);
+  border: 1px solid var(--color-line-strong);
+  background: var(--color-surface);
+  color: var(--color-ink);
+  border-radius: 8px;
+  padding: 8px 12px;
+  cursor: pointer;
+}
+.physics-viewport {
+  position: relative;
+  flex: 1;
+  min-height: 560px;
+  overflow: hidden;
+  background: #eae6df;
+}
+.physics-viewport > canvas {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  inset: 0;
+  touch-action: none;
+}
+.physics-settings,
+.component-hud,
+.physics-telemetry {
+  background: rgb(250 248 245 / 0.94);
+  border: 1px solid rgb(181 168 151 / 0.35);
+  border-radius: 12px;
+  box-shadow: 0 5px 25px rgb(51 42 29 / 0.04);
+}
+.physics-settings {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  width: 224px;
+}
+.physics-settings summary {
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 500;
+  padding: 14px 16px;
+}
+.physics-setting-fields {
+  padding: 0 16px 14px;
+  display: grid;
+  gap: 14px;
+}
+.physics-setting-fields > label > span {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  font-size: 11px;
+  color: var(--color-ink-2);
+}
+.physics-setting-fields output {
+  font: 10px var(--font-mono);
+  white-space: nowrap;
+}
+.physics-setting-fields input[type="range"] {
+  width: 100%;
+  margin: 7px 0 0;
+  accent-color: var(--color-accent-ink);
+  height: 12px;
+  cursor: pointer;
+}
+.physics-toggle {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 11px;
+}
+.physics-toggle input {
+  accent-color: var(--color-accent-ink);
+  margin: 0;
+}
+.physics-peripherals {
+  display: flex;
+  gap: 6px;
+}
+.physics-peripherals button {
+  flex: 1;
+  padding: 7px 5px;
+  font-size: 11px;
+}
+.physics-peripherals button[aria-pressed="true"] {
+  background: #f8d9b8;
+  border-color: var(--color-accent-ink);
+}
+.physics-setting-fields > p {
+  font-size: 10px;
+  color: var(--color-mute);
+}
+.physics-huds {
+  position: absolute;
+  right: 20px;
+  top: 20px;
+  width: 244px;
+  display: grid;
+  gap: 12px;
+}
+.component-hud,
+.first-person-hud {
+  position: relative;
+  border: 1px solid rgb(181 168 151 / 0.35);
+  border-radius: 12px;
+  background: #f6f3ee;
+  overflow: hidden;
+}
+.hud-heading {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 14px 16px;
+  background: #f6f3ee;
+  border-radius: 12px;
+  font: 10px var(--font-mono);
+  color: var(--color-mute);
+  cursor: pointer;
+  list-style: none;
+}
+.hud-heading::before {
+  content: "▸";
+}
+details[open] > .hud-heading::before {
+  content: "▾";
+}
+.hud-heading::-webkit-details-marker {
+  display: none;
+}
+.hud-heading > span:last-child {
+  margin-left: auto;
+  font-size: 9px;
+}
+.hud-render-area {
+  position: relative;
+  margin: 0 11px;
+  pointer-events: none;
+}
+.hud-render-area > canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+.hud-model-overlay {
+  position: relative;
+  aspect-ratio: 25 / 28;
+}
+.first-person-view {
+  aspect-ratio: 16 / 10;
+}
+.hud-rotation {
+  position: absolute;
+  top: var(--motor-y, 61%);
+  transform: translateY(-50%);
+  font: 36px var(--font-sans);
+  color: var(--color-accent-ink);
+  visibility: hidden;
+}
+.hud-rotation-left {
+  left: 9%;
+}
+.hud-rotation-right {
+  right: 9%;
+}
+.hud-rotation.is-active {
+  visibility: visible;
+}
+.hud-readings {
+  display: flex;
+  justify-content: space-around;
+  width: 100%;
+  padding: 6px 0 0;
+  background: #f6f3ee;
+  font: 10px var(--font-mono);
+  color: var(--color-mute);
+}
+.hud-readings strong {
+  color: var(--color-ink);
+  font-weight: 500;
+}
+.component-hud > p,
+.first-person-hud > p {
+  padding: 4px 6px 8px;
+  background: #f6f3ee;
+  border-radius: 0 0 12px 12px;
+  width: 100%;
+  text-align: center;
+  font-size: 9px;
+  color: var(--color-mute);
+}
+.physics-telemetry {
+  position: absolute;
+  bottom: 20px;
+  left: 20px;
+  display: grid;
+  grid-template-columns: 84px 94px 132px 140px;
+  gap: 22px;
+  padding: 14px 18px;
+}
+.physics-telemetry > div {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  min-width: 0;
+}
+.physics-telemetry span {
+  font: 9px var(--font-mono);
+  letter-spacing: 0.08em;
+  color: var(--color-mute);
+}
+.physics-telemetry strong {
+  font: 14px var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+.physics-telemetry small {
+  font-size: 10px;
+  color: var(--color-mute);
+}
+.physics-contacts strong {
+  display: flex;
+  gap: 9px;
+  padding-top: 3px;
+}
+.physics-contacts .contact-on {
+  color: #476546;
+}
+.physics-contacts .contact-off {
+  color: #9a5418;
+}
+.physics-drive {
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+  text-align: center;
+}
+.physics-shortcuts {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+.physics-shortcuts button {
+  border: 0;
+  padding: 0;
+  background: transparent;
+  color: var(--color-ink-2);
+  cursor: pointer;
+  font: 10px var(--font-sans);
+}
+.physics-shortcuts button:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+.physics-shortcuts kbd {
+  font: 9px var(--font-mono);
+  border: 1px solid var(--color-line-strong);
+  border-radius: 4px;
+  padding: 2px 4px;
+  background: #f6f3ee;
+}
+.drive-pad {
+  display: grid;
+  grid-template-columns: repeat(3, 44px);
+  grid-template-rows: repeat(2, 44px);
+  gap: 6px;
+  justify-content: center;
+}
+.drive-key {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  font-family: var(--font-mono);
+  background: rgb(250 248 245 / 0.92);
+  border: 1px solid var(--color-line-strong);
+  border-radius: 9px;
+  color: var(--color-ink);
+  cursor: pointer;
+  touch-action: none;
+  user-select: none;
+}
+.drive-key > span {
+  font-size: 20px;
+}
+.drive-key small {
+  font-size: 9px;
+}
+.drive-key:disabled {
+  opacity: 0.4;
+}
+.drive-key-forward {
+  grid-column: 2;
+  grid-row: 1;
+}
+.drive-key-left {
+  grid-column: 1;
+  grid-row: 2;
+}
+.drive-key-reverse {
+  grid-column: 2;
+  grid-row: 2;
+}
+.drive-key-right {
+  grid-column: 3;
+  grid-row: 2;
+}
+.drive-key.is-active {
+  background: #f8d9b8;
+  border-color: var(--color-accent-ink);
+}
+.physics-drive > p {
+  margin-top: 8px;
+  font-size: 10px;
+  color: var(--color-mute);
+}
+.physics-orbit-hint {
+  position: absolute;
+  left: 50%;
+  bottom: 115px;
+  transform: translateX(-50%);
+  white-space: nowrap;
+  font-size: 11px;
+  color: var(--color-mute);
+  pointer-events: none;
+}
+.physics-loading {
+  position: absolute;
+  z-index: 5;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  background: #eae6df;
+  font-size: 15px;
+  text-align: center;
+  padding: 24px;
+}
+.physics-footnote {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 24px;
+  gap: 16px;
+  font-size: 11px;
+  color: var(--color-mute);
+}
+.physics-footnote details {
+  position: relative;
+}
+.physics-footnote summary {
+  cursor: pointer;
+  white-space: nowrap;
+}
+.physics-footnote details p {
+  position: absolute;
+  z-index: 10;
+  bottom: 30px;
+  right: 0;
+  width: min(380px, 85vw);
+  background: var(--color-surface);
+  padding: 20px;
+  border: 1px solid var(--color-line);
+  border-radius: 12px;
+  font-size: 13px;
+  box-shadow: 0 5px 30px #0001;
+}
+@media (max-width: 900px) {
+  .physics-telemetry {
+    gap: 14px;
+    grid-template-columns: 84px 94px 132px;
+  }
+  .physics-contacts {
+    display: none !important;
+  }
+  .physics-settings {
+    width: 202px;
+  }
+}
+@media (max-width: 600px) {
+  .physics-page {
+    min-height: 850px;
+  }
+  .physics-viewport {
+    min-height: 650px;
+  }
+  .physics-settings {
+    left: 10px;
+    top: 10px;
+    width: 170px;
+  }
+  .physics-setting-fields {
+    padding-inline: 10px;
+    gap: 10px;
+  }
+  .physics-settings summary {
+    padding: 12px 10px;
+    font-size: 12px;
+  }
+  .physics-huds {
+    right: 10px;
+    top: 10px;
+    width: 148px;
+  }
+  .hud-heading {
+    font-size: 8px;
+    padding-inline: 8px;
+  }
+  .hud-rotation {
+    font-size: 25px;
+  }
+  .hud-readings {
+    font-size: 8px;
+  }
+  .component-hud > p {
+    font-size: 8px;
+  }
+  .physics-telemetry {
+    left: 10px;
+    bottom: 10px;
+    padding: 12px 10px;
+    gap: 12px;
+    grid-template-columns: 65px 75px 110px;
+  }
+  .physics-telemetry strong {
+    font-size: 11px;
+  }
+  .physics-telemetry span {
+    font-size: 8px;
+  }
+  .physics-drive {
+    right: 12px;
+    bottom: 96px;
+  }
+  .physics-orbit-hint {
+    bottom: 74px;
+    font-size: 10px;
+  }
+  .physics-footnote {
+    padding: 10px 12px;
+    font-size: 9px;
+  }
+}
