@@ -7,9 +7,11 @@ from typing import Any, Protocol
 @dataclass(frozen=True)
 class Detection:
     label: str
-    confidence: float
+    confidence: float | None
     # Normalized [0, 1] box: x, y of the top-left corner, then width, height.
     box: tuple[float, float, float, float]
+    match_distance: float | None = None
+    kind: str = "object"  # "object" or "face"
 
     @property
     def center_x(self) -> float:

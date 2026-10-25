@@ -53,11 +53,18 @@ class OpenAICompatProvider:
 
     def __init__(self, cfg: AIConfig) -> None:
         headers = {}
-        if cfg.api_key_env and (key := os.environ.get(cfg.api_key_env)):
+        key = cfg.api_key.get_secret_value() if cfg.api_key else None
+        if key is None and cfg.api_key_env:
+            key = os.environ.get(cfg.api_key_env)
+        if key:
             headers["Authorization"] = f"Bearer {key}"
         self._model = cfg.model
         self._client = httpx.AsyncClient(
-            base_url=cfg.base_url.rstrip("/"), headers=headers, timeout=cfg.timeout_s
+            base_url=cfg.base_url.rstrip("/") + "/",
+            headers=headers,
+            timeout=cfg.timeout_s,
+            trust_env=False,
+            follow_redirects=False,
         )
 
     async def complete(self, messages: list[ChatMessage], *, json_mode: bool = False) -> str:
@@ -67,7 +74,7 @@ class OpenAICompatProvider:
         }
         if json_mode:
             body["response_format"] = {"type": "json_object"}
-        response = await self._client.post("/chat/completions", json=body)
+        response = await self._client.post("chat/completions", json=body)
         response.raise_for_status()
         content: str = response.json()["choices"][0]["message"]["content"]
         return content
@@ -77,8 +84,6 @@ class OpenAICompatProvider:
 
 
 def build_provider(cfg: AIConfig) -> LLMProvider | None:
-    if cfg.provider == "fake":
-        return FakeProvider()
     if cfg.provider == "openai_compat":
         return OpenAICompatProvider(cfg)
     return None

@@ -25,7 +25,7 @@ ToF ─────►│  Environment         │
 - **Vision:** OpenCV and ONNX Runtime with lightweight object/person detection
 - **Speech:** faster-whisper (STT), Piper (TTS)
 
-Hardware-specific code stays isolated behind a hardware abstraction layer with a simulated backend, so the whole stack runs on Windows and macOS during development. Details, decisions and the dev workflow are in [software.md](software.md).
+Hardware-specific code stays isolated behind a hardware abstraction layer. The default `local` profile runs administration and configured local processing without a robot backend. The `pi` profile initializes physical drivers. Missing hardware never supplies synthetic readings, and motion is rejected until physical hardware is initialized. Simulation helpers are used only by explicitly injected test fixtures. Details, decisions and the dev workflow are in [software.md](software.md).
 
 ## Robot API
 
@@ -88,6 +88,14 @@ User → Speech → LLM → Intent → Behavior Engine → Navigation / Safety �
 Behavior states: `IDLE`, `EXPLORE`, `FOLLOW`, `APPROACH`, `AVOID`, `LISTEN`, `SPEAK`, `SLEEP`.
 
 This keeps AI decisions away from safety-critical, low-level motor control.
+
+## Runtime safety and access
+
+All motor commands pass through the safety governor and a dedicated watchdog thread. Hard obstacle limits are applied after ramping as well. The watchdog enforces command expiry independently of asyncio and cuts output after a missing control heartbeat. It is a software fallback; a physical heartbeat cutoff/e-stop is still required for unattended operation.
+
+A dedicated sensor thread owns ToF reads and cleanup, so cancellation cannot close an active read. A failed/stalled runtime loop stops motion, shuts down the API and exits with an error for systemd to restart. Health and telemetry report actual progress, faults and control-loop timing.
+
+The API defaults to loopback and serves a compact administration dashboard at `/admin`. The first registered user becomes administrator and closes public registration. SQLite stores accounts, roles, session hashes, token hashes and audit history. Browser sessions use HttpOnly cookies with CSRF protection; integrations use scoped, expiring, individually revocable bearer tokens issued through the dashboard. HTTP and WebSocket authorization follows the user's current role, including after AI planning. Delayed AI results expire and cannot override a newer command or stop. Configuration rejects unknown fields and unsafe values before hardware initialization. See [software.md](software.md#api-access) for setup, remote access and the hardware validation sequence.
 
 ## Repository layout
 

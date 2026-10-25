@@ -57,20 +57,38 @@ class SafetyGovernor:
         self._range_at = float("-inf")
         self._last = WheelCommand()
         self._last_at = clock.now()
+        self._revision = 0
+
+    @property
+    def revision(self) -> int:
+        """Changes whenever a newer command or stop supersedes pending work."""
+        return self._revision
+
+    def invalidate_pending(self) -> None:
+        self._revision += 1
+
+    @property
+    def remaining_s(self) -> float:
+        return max(0.0, self._deadline - self._clock.now()) if not self._estop else 0.0
 
     @property
     def estopped(self) -> bool:
         return self._estop
 
     def command(self, left: float, right: float, duration_s: float | None = None) -> None:
+        self._revision += 1
         if self._estop:
             return
         duration = self._cfg.command_timeout_s if duration_s is None else duration_s
+        if not all(math.isfinite(value) for value in (left, right, duration)):
+            self.stop()
+            return
         duration = max(0.0, min(duration, self._cfg.max_command_duration_s))
         self._target = WheelCommand(left, right)
         self._deadline = self._clock.now() + duration
 
     def stop(self) -> None:
+        self._revision += 1
         self._target = WheelCommand()
         self._deadline = 0.0
 
@@ -83,9 +101,13 @@ class SafetyGovernor:
         self._estop = False
         self.stop()
 
-    def update_range(self, distance_mm: float | None) -> None:
-        self._range_mm = distance_mm
-        self._range_at = self._clock.now()
+    def update_range(self, distance_mm: float | None, *, observed_at: float | None = None) -> None:
+        self._range_mm = (
+            distance_mm
+            if distance_mm is not None and math.isfinite(distance_mm) and distance_mm >= 0.0
+            else None
+        )
+        self._range_at = self._clock.now() if observed_at is None else observed_at
 
     def _current_range(self) -> float | None:
         if self._clock.now() - self._range_at > self._cfg.range_stale_s:
@@ -126,11 +148,23 @@ class SafetyGovernor:
                 left, right = left - cut, right - cut
                 limit = "slow_zone"
 
+        # The ramp may otherwise reintroduce forward motion when the two wheels
+        # reverse at different rates. Preserve this tick's safety-limited forward cap.
+        max_forward = max(0.0, (left + right) / 2.0)
         if cfg.ramp_per_s is not None:
             step = cfg.ramp_per_s * dt
             ramped = (_ramp(self._last.left, left, step), _ramp(self._last.right, right, step))
             if ramped != (left, right) and limit is None:
                 limit = "ramp"
             left, right = ramped
+
+        excess = max(0.0, (left + right) / 2.0 - max_forward)
+        if excess:
+            # Reduce positive wheels only: safety must never accelerate a reverse
+            # wheel to compensate for a ramp-limited wheel.
+            positive = max(left, 0.0) + max(right, 0.0)
+            scale = max(0.0, (positive - 2.0 * excess) / positive)
+            left = left * scale if left > 0.0 else left
+            right = right * scale if right > 0.0 else right
 
         return result(WheelCommand(left, right), limit)

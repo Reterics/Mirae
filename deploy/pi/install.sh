@@ -12,14 +12,19 @@ REPO="$(cd "$(dirname "$0")/../.." && pwd)"
 # able to see the system site-packages.
 apt-get update
 apt-get install -y --no-install-recommends \
-    python3-venv python3-dev build-essential \
+    python3-venv python3-dev build-essential cmake \
     python3-picamera2 python3-lgpio \
     i2c-tools libportaudio2 alsa-utils rsync
 
 id -u mirae >/dev/null 2>&1 || useradd --system --create-home --groups gpio,i2c,video,audio mirae
 
 mkdir -p "$PREFIX" /etc/mirae
-rsync -a --delete --exclude .git --exclude .venv "$REPO/" "$PREFIX/"
+if systemctl cat mirae.service >/dev/null 2>&1; then
+    # Finish motor shutdown before replacing code used by a running robot.
+    systemctl stop mirae.service
+fi
+rsync -a --delete --exclude .git --exclude .venv --exclude /var/ \
+    --exclude .pytest_cache --exclude .mypy_cache --exclude .ruff_cache "$REPO/" "$PREFIX/"
 python3 -m venv --system-site-packages "$PREFIX/.venv"
 "$PREFIX/.venv/bin/pip" install --upgrade pip
 "$PREFIX/.venv/bin/pip" install "$PREFIX[$EXTRAS]"

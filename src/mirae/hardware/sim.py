@@ -14,7 +14,7 @@ class SimWorld:
         self._last = clock.now()
         self._counts = [0.0, 0.0]
         self.speeds = (0.0, 0.0)
-        # Settable from tests or the /api/sim/range endpoint.
+        # Explicit test fixture only; never selected by the application runtime.
         self.range_mm: float | None = 2000.0
 
     def advance(self) -> None:

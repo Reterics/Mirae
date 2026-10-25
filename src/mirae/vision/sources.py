@@ -16,7 +16,24 @@ class OpenCVCamera:
     def __init__(self, cfg: VisionConfig) -> None:
         import cv2
 
-        self._cap = cv2.VideoCapture(cfg.camera_index)
+        from mirae.pipeline.devices import camera_devices
+
+        found = camera_devices()
+        items = [item for item in found["items"] if item["source"] == "opencv"]
+        selected = (
+            next((item for item in items if item["id"] == cfg.camera_device), None)
+            if cfg.camera_device
+            else next(iter(items), None)
+        )
+        if selected is None:
+            raise RuntimeError(
+                found["error"] or "Selected camera is no longer connected. Refresh the device list."
+            )
+        self.device_name = selected["name"]
+        self._cap = cv2.VideoCapture(selected["index"], selected["backend"])
+        if not self._cap.isOpened():
+            self._cap.release()
+            raise RuntimeError("configured camera could not be opened")
         self._cap.set(cv2.CAP_PROP_FRAME_WIDTH, cfg.width)
         self._cap.set(cv2.CAP_PROP_FRAME_HEIGHT, cfg.height)
 
@@ -32,7 +49,14 @@ class Picamera2Camera:
     def __init__(self, cfg: VisionConfig) -> None:
         from picamera2 import Picamera2
 
-        self._cam = Picamera2()
+        available = Picamera2.global_camera_info()
+        if not available:
+            raise RuntimeError("No Raspberry Pi camera detected")
+        index = (
+            int(cfg.camera_device.rsplit(":", 1)[-1]) if cfg.camera_device else available[0]["Num"]
+        )
+        self.device_name = next((c["Model"] for c in available if c["Num"] == index), "Pi camera")
+        self._cam = Picamera2(index)
         config = self._cam.create_video_configuration(
             main={"size": (cfg.width, cfg.height), "format": "BGR888"}
         )

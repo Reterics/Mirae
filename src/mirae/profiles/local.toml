@@ -1,0 +1,10 @@
+# Local administration and optional real camera/audio/LLM services.
+# Motor, encoder and range data are absent until physical hardware is configured.
+[hardware]
+backend = "none"
+
+[api]
+host = "127.0.0.1"
+
+[ai]
+provider = "none"

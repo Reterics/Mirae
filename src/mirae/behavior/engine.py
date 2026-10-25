@@ -51,6 +51,7 @@ class BehaviorEngine:
             self._bus.publish(Topics.STATE, state)
 
     def handle(self, intent: Intent) -> None:
+        self._governor.invalidate_pending()
         self._bus.publish(Topics.INTENT, intent)
         match intent:
             case Stop():
@@ -80,4 +81,5 @@ class BehaviorEngine:
         if self.state in (BehaviorState.FOLLOW, BehaviorState.APPROACH, BehaviorState.EXPLORE):
             # TODO(V0.3/V0.6): drive from vision.detections and range data.
             log.warning("%s needs the vision pipeline; returning to IDLE", self.state)
+            self._governor.stop()
             self._set_state(BehaviorState.IDLE)

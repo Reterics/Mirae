@@ -38,7 +38,7 @@ Mirae is a two-wheeled companion that lives on your floor. It sees you, hears yo
 
 Its personality comes from software rather than mechanics. Computer vision, speech recognition and a pluggable AI layer run on a Raspberry Pi 5. The body around them is fully 3D-printable on an ordinary 220 × 220 printer.
 
-> 🚧 **Status: early prototype.** Hardware selection, drivetrain prototyping and the enclosure design are in progress. The software skeleton runs in simulation; the Pi hardware drivers are written but not yet tested on the robot.
+> 🚧 **Status: early prototype.** Hardware selection, drivetrain prototyping and the enclosure design are in progress. Administration runs without attached hardware; the Pi hardware drivers are written but not yet tested on the robot.
 
 ## Features (planned)
 
@@ -67,11 +67,15 @@ Needs Python 3.11+ and [uv](https://docs.astral.sh/uv/). Works on Windows, macOS
 
 ```bash
 uv sync
-uv run mirae run          # simulated robot, API docs at http://127.0.0.1:8000/docs
+uv run mirae run          # admin console at http://127.0.0.1:8000/admin
 uv run pytest
 ```
 
 Deploying to the Pi 5, the API and the safety rules are covered in [docs/software.md](docs/software.md). The pin map is in [docs/wiring.md](docs/wiring.md).
+
+Open the admin console to create the first administrator. Registration then closes; manage users, custom roles and scoped API keys from the dashboard. Credentials persist locally in SQLite. Robot APIs require a signed-in session or an API key, including on loopback.
+
+The default `local` profile starts with no hardware backend or LLM selected. The light admin console uses the Mirae logo and self-hosted IBM Plex Sans. It manages external LLM connections, local vision/speech processing and hardware settings. Local processing includes dependency Install buttons with a live console, verified model downloads/activation, discovered camera/microphone choices and actual device tests. Only actual samples are reported; absent robot hardware has no fabricated readings, and movement requests receive HTTP 503. No demo users, connections or telemetry are seeded.
 
 ## Hardware
 

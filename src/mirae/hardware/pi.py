@@ -8,6 +8,7 @@ Untested on hardware so far: verify each driver against docs/wiring.md.
 
 from __future__ import annotations
 
+from contextlib import ExitStack
 from typing import Any
 
 from mirae.config import HardwareConfig
@@ -26,24 +27,38 @@ class Tb6612Driver:
 
         pins = cfg.motor_pins
         self._invert = (-1.0 if cfg.invert_left else 1.0, -1.0 if cfg.invert_right else 1.0)
-        self._stby = DigitalOutputDevice(pins.stby, initial_value=False)
-        self._left = Motor(forward=pins.ain1, backward=pins.ain2, enable=pins.pwma, pwm=True)
-        self._right = Motor(forward=pins.bin1, backward=pins.bin2, enable=pins.pwmb, pwm=True)
-        self._stby.on()
+        with ExitStack() as cleanup:
+            self._stby = DigitalOutputDevice(pins.stby, initial_value=False)
+            cleanup.callback(self._stby.close)
+            self._left = Motor(forward=pins.ain1, backward=pins.ain2, enable=pins.pwma, pwm=True)
+            cleanup.callback(self._left.close)
+            self._right = Motor(forward=pins.bin1, backward=pins.bin2, enable=pins.pwmb, pwm=True)
+            cleanup.callback(self._right.close)
+            # STBY stays low until the first actual write.
+            cleanup.pop_all()
 
     def set_speeds(self, left: float, right: float) -> None:
+        if not left and not right:
+            self.stop()
+            return
         self._left.value = max(-1.0, min(1.0, left * self._invert[0]))
         self._right.value = max(-1.0, min(1.0, right * self._invert[1]))
+        self._stby.on()
 
     def stop(self) -> None:
-        self._left.stop()
-        self._right.stop()
+        try:
+            self._stby.off()
+        finally:
+            try:
+                self._left.stop()
+            finally:
+                self._right.stop()
 
     def close(self) -> None:
-        self.stop()
-        self._stby.off()
-        for device in (self._left, self._right, self._stby):
-            device.close()
+        with ExitStack() as cleanup:
+            for device in (self._stby, self._right, self._left):
+                cleanup.callback(device.close)
+            self.stop()
 
 
 class GpioEncoders:
@@ -59,15 +74,20 @@ class GpioEncoders:
 
         pins = cfg.encoder_pins
         self._sign = (-1 if cfg.invert_left else 1, -1 if cfg.invert_right else 1)
-        self._left = RotaryEncoder(pins.left_a, pins.left_b, max_steps=0)
-        self._right = RotaryEncoder(pins.right_a, pins.right_b, max_steps=0)
+        with ExitStack() as cleanup:
+            self._left = RotaryEncoder(pins.left_a, pins.left_b, max_steps=0)
+            cleanup.callback(self._left.close)
+            self._right = RotaryEncoder(pins.right_a, pins.right_b, max_steps=0)
+            cleanup.pop_all()
 
     def read_counts(self) -> tuple[int, int]:
         return self._left.steps * self._sign[0], self._right.steps * self._sign[1]
 
     def close(self) -> None:
-        self._left.close()
-        self._right.close()
+        try:
+            self._left.close()
+        finally:
+            self._right.close()
 
 
 class Vl53l1xSensor:
@@ -77,26 +97,35 @@ class Vl53l1xSensor:
 
         tof = cfg.tof
         self._xshut: Any = None
-        if tof.xshut_pin is not None:
-            self._xshut = DigitalOutputDevice(tof.xshut_pin, initial_value=True)
-        self._dev = VL53L1X.VL53L1X(i2c_bus=tof.i2c_bus, i2c_address=tof.address)
-        self._dev.open()
-        self._dev.start_ranging(1)  # 1 = short range, up to ~1.3 m, best in ambient light
+        with ExitStack() as cleanup:
+            if tof.xshut_pin is not None:
+                self._xshut = DigitalOutputDevice(tof.xshut_pin, initial_value=True)
+                cleanup.callback(self._xshut.close)
+            self._dev = VL53L1X.VL53L1X(i2c_bus=tof.i2c_bus, i2c_address=tof.address)
+            self._dev.open()
+            cleanup.callback(self._dev.close)
+            self._dev.start_ranging(1)  # short range: best in ambient light
+            cleanup.pop_all()
 
     def read_mm(self) -> float | None:
         distance = self._dev.get_distance()
         return float(distance) if distance > 0 else None
 
     def close(self) -> None:
-        self._dev.stop_ranging()
-        self._dev.close()
-        if self._xshut is not None:
-            self._xshut.close()
+        with ExitStack() as cleanup:
+            if self._xshut is not None:
+                cleanup.callback(self._xshut.close)
+            cleanup.callback(self._dev.close)
+            self._dev.stop_ranging()
 
 
 def build_pi(cfg: HardwareConfig) -> HardwareBundle:
-    return HardwareBundle(
-        motors=Tb6612Driver(cfg),
-        encoders=GpioEncoders(cfg),
-        range_sensor=Vl53l1xSensor(cfg),
-    )
+    with ExitStack() as cleanup:
+        motors = Tb6612Driver(cfg)
+        cleanup.callback(motors.close)
+        encoders = GpioEncoders(cfg)
+        cleanup.callback(encoders.close)
+        sensor = Vl53l1xSensor(cfg)
+        bundle = HardwareBundle(motors, encoders, sensor)
+        cleanup.pop_all()
+        return bundle

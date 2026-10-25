@@ -1,0 +1,173 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="light" />
+    <title>Mirae administration</title>
+    <link rel="icon" href="/admin/assets/favicon.png" />
+    <link rel="stylesheet" href="/admin/assets/admin.css" />
+    <script type="module" src="/admin/assets/admin.js"></script>
+  </head>
+  <body>
+    <div id="loading" class="loading">
+      <img
+        src="/admin/assets/mirae-logo.png"
+        alt="Mirae"
+        width="48"
+        height="48"
+      /><span>Loading administration…</span>
+    </div>
+    <section id="auth" class="auth-layout" hidden aria-labelledby="auth-title">
+      <form id="auth-form" class="auth-card">
+        <img
+          class="auth-logo"
+          src="/admin/assets/mirae-logo.png"
+          alt="Mirae"
+          width="84"
+          height="84"
+        />
+        <h1 id="auth-title">Sign in to Mirae</h1>
+        <p id="auth-description" class="muted"></p>
+        <label id="display-name-label" hidden
+          >Display name<input
+            name="display_name"
+            autocomplete="name"
+            maxlength="80"
+        /></label>
+        <label
+          >Username<input
+            name="username"
+            autocomplete="username"
+            minlength="3"
+            maxlength="64"
+            pattern="[a-zA-Z0-9]([a-zA-Z0-9_.]|-){2,63}"
+            required
+            autofocus
+        /></label>
+        <label
+          >Password<input
+            name="password"
+            type="password"
+            autocomplete="current-password"
+            maxlength="128"
+            required
+        /></label>
+        <p id="password-hint" class="field-hint" hidden>
+          At least 12 characters.
+        </p>
+        <p id="auth-error" class="form-error" role="alert"></p>
+        <button id="auth-submit" class="button primary" type="submit">
+          Sign in
+        </button>
+        <p id="auth-note" class="field-hint"></p>
+      </form>
+    </section>
+    <div id="shell" class="shell" hidden>
+      <aside id="sidebar" class="sidebar">
+        <div class="sidebar-heading">
+          <a class="wordmark" href="#overview"
+            ><img
+              src="/admin/assets/mirae-logo.png"
+              alt=""
+              width="44"
+              height="44"
+            /><span>Mirae<small>Administration</small></span></a
+          >
+          <button
+            id="navigation-close"
+            class="button navigation-control"
+            type="button"
+            aria-label="Close navigation"
+          >
+            <span aria-hidden="true">×</span>
+          </button>
+        </div>
+        <nav id="navigation" aria-label="Administration">
+          <div class="nav-caption">Robot</div>
+          <button data-page="overview">Runtime</button>
+          <button data-page="connections" data-permission="pipeline:manage">
+            LLM connections
+          </button>
+          <button data-page="local" data-permission="pipeline:manage">
+            Local processing
+          </button>
+          <button data-page="hardware" data-permission="pipeline:manage">
+            Hardware
+          </button>
+          <div class="nav-caption">Access</div>
+          <button data-page="users" data-permission="users:manage">
+            Users<span id="users-count" class="nav-count"></span>
+          </button>
+          <button data-page="roles" data-permission="roles:manage">
+            Roles
+          </button>
+          <button data-page="tokens" data-permission="tokens:manage">
+            API keys
+          </button>
+          <button data-page="audit" data-permission="audit:read">
+            Audit log
+          </button>
+        </nav>
+        <div class="sidebar-bottom">
+          <button id="account-button" class="account">
+            <span id="avatar" class="avatar"></span
+            ><span
+              ><strong id="account-name"></strong
+              ><small id="account-role"></small
+            ></span>
+          </button>
+        </div>
+      </aside>
+      <div class="main-layout">
+        <header class="topbar">
+          <div class="topbar-left">
+            <button
+              id="navigation-toggle"
+              class="button navigation-control"
+              type="button"
+              aria-label="Open navigation"
+              aria-controls="navigation-drawer"
+              aria-expanded="false"
+              aria-haspopup="dialog"
+            >
+              <svg
+                width="20"
+                height="20"
+                viewBox="0 0 20 20"
+                aria-hidden="true"
+              >
+                <path d="M3 5h14M3 10h14M3 15h14" />
+              </svg>
+            </button>
+            <span id="backend-label" class="muted"></span>
+          </div>
+          <div class="topbar-right">
+            <span id="connection" class="connection"></span
+            ><button id="account-top" class="button small ghost">Account</button
+            ><button id="logout" class="button small ghost">Sign out</button>
+          </div>
+        </header>
+        <main>
+          <div class="page-heading">
+            <div>
+              <h1 id="page-title" tabindex="-1">Runtime</h1>
+              <p id="page-description" class="muted"></p>
+            </div>
+            <button id="create-button" class="button primary" hidden></button>
+          </div>
+          <section id="content" aria-live="polite"></section>
+          <footer><span id="updated-at"></span></footer>
+        </main>
+      </div>
+    </div>
+    <dialog
+      id="navigation-drawer"
+      aria-label="Administration navigation"
+    ></dialog>
+    <dialog id="modal" aria-labelledby="modal-title">
+      <div id="modal-body"></div>
+    </dialog>
+    <div id="toast" class="toast" role="status" hidden></div>
+  </body>
+</html>

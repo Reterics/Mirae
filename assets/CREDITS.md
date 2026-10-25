@@ -22,3 +22,7 @@ The full licence is preserved in
 [`LICENSE-raspberry-pi-5-model.txt`](../site/public/media/assembly/LICENSE-raspberry-pi-5-model.txt).
 
 The family illustration and the printing and floor footage are AI-generated.
+
+The administration console bundles IBM Plex Sans Regular, Medium and SemiBold
+from [IBM Plex](https://github.com/IBM/plex). Its Open Font License is preserved
+in [`src/mirae/admin/fonts/LICENSE.txt`](../src/mirae/admin/fonts/LICENSE.txt).

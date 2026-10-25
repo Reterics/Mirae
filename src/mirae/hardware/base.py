@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from contextlib import ExitStack
 from dataclasses import dataclass
 from typing import Protocol
 
@@ -39,7 +40,11 @@ class HardwareBundle:
     encoders: WheelEncoders
     range_sensor: RangeSensor
 
-    def close(self) -> None:
-        self.motors.stop()
-        for device in (self.motors, self.encoders, self.range_sensor):
-            device.close()
+    def close(self, *, close_range_sensor: bool = True) -> None:
+        # All cleanup runs even when one device's stop/close raises.
+        with ExitStack() as cleanup:
+            if close_range_sensor:
+                cleanup.callback(self.range_sensor.close)
+            cleanup.callback(self.encoders.close)
+            cleanup.callback(self.motors.close)
+            self.motors.stop()

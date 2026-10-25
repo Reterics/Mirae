@@ -166,3 +166,57 @@ def test_ramp_reversal_starts_from_zero(ramped: SafetyGovernor, clock: FakeClock
 def test_ramp_step_is_capped_after_a_stall(ramped: SafetyGovernor, clock: FakeClock) -> None:
     ramped.command(0.6, 0.6, duration_s=5.0)
     assert _tick(ramped, clock, 2.0) == pytest.approx((0.15, 0.15))
+
+
+@pytest.mark.parametrize("distance", [None, 50.0, 210.0])
+@pytest.mark.parametrize("target", [(0.6, -0.2), (-0.2, 0.6), (0.6, 0.2), (-0.6, 0.6)])
+def test_combined_ramp_and_range_never_exceed_safe_forward_component(
+    ramped: SafetyGovernor,
+    clock: FakeClock,
+    distance: float | None,
+    target: tuple[float, float],
+) -> None:
+    ramped.command(0.6, 0.6, duration_s=5.0)
+    for _ in range(4):
+        _tick(ramped, clock)
+    ramped.command(*target, duration_s=5.0)
+    permitted_forward = max(0.0, sum(target) / 2.0) * (0.5 if distance == 210.0 else 0.0)
+    for _ in range(10):
+        clock.advance(0.02)
+        ramped.update_range(distance)
+        cmd, _ = ramped.output()
+        assert (cmd.left + cmd.right) / 2.0 <= permitted_forward + 1e-12
+        assert abs(cmd.left) <= 0.6
+        assert abs(cmd.right) <= 0.6
+
+
+@pytest.mark.parametrize("distance", [float("nan"), float("inf"), float("-inf"), -1.0])
+def test_invalid_sensor_data_blocks_forward(governor: SafetyGovernor, distance: float) -> None:
+    governor.update_range(distance)
+    governor.command(0.3, 0.3)
+    cmd, status = governor.output()
+    assert (cmd.left, cmd.right) == (0.0, 0.0)
+    assert status.limit == "no_range"
+    assert status.range_mm is None
+
+
+@pytest.mark.parametrize("value", [float("nan"), float("inf"), float("-inf")])
+def test_invalid_internal_command_clears_previous_motion(
+    governor: SafetyGovernor,
+    value: float,
+) -> None:
+    governor.command(0.3, 0.3)
+    governor.command(value, 0.3)
+    assert governor.output()[0].left == 0.0
+    governor.command(0.3, 0.3, duration_s=value)
+    assert governor.output()[0].left == 0.0
+
+
+def test_worker_delivery_does_not_refresh_an_old_measurement(
+    governor: SafetyGovernor,
+    clock: FakeClock,
+) -> None:
+    clock.advance(1.0)
+    governor.update_range(2000.0, observed_at=0.0)
+    governor.command(0.3, 0.3)
+    assert governor.output()[1].limit == "no_range"
