@@ -94,6 +94,31 @@ class PipelineSettings:
             )
             self.accounts.audit(db, actor, "pipeline.updated", name)
 
+    def secret(self, name: str) -> str | None:
+        """A service credential (e.g. ``elevenlabs``), decrypted. None when not set."""
+        token = self.value(f"secret:{name}")
+        if token is None:
+            return None
+        try:
+            return self._cipher().decrypt(token.encode()).decode()
+        except (InvalidToken, ValueError) as exc:
+            raise AccountError(
+                503, "cannot decrypt API credentials; check the credential key"
+            ) from exc
+
+    def set_secret(self, name: str, value: str | None, actor: str) -> None:
+        token = self._cipher().encrypt(value.encode()).decode() if value else None
+        with self.accounts.connection(write=True) as db:
+            if token is None:
+                db.execute("DELETE FROM pipeline_settings WHERE name=?", (f"secret:{name}",))
+            else:
+                db.execute(
+                    "INSERT INTO pipeline_settings VALUES (?,?) ON CONFLICT(name) "
+                    "DO UPDATE SET value=excluded.value",
+                    (f"secret:{name}", json.dumps(token)),
+                )
+            self.accounts.audit(db, actor, "secret.updated" if token else "secret.cleared", name)
+
     def connections(self) -> list[dict[str, Any]]:
         with self.accounts.connection() as db:
             rows = db.execute(

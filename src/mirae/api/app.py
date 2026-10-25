@@ -15,7 +15,7 @@ from importlib import resources
 from typing import Annotated, Any, Literal
 
 from fastapi import Depends, FastAPI, HTTPException, Request, WebSocket, WebSocketDisconnect
-from fastapi.responses import FileResponse, JSONResponse, RedirectResponse
+from fastapi.responses import FileResponse, JSONResponse, RedirectResponse, Response
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel, ConfigDict, Field
 
@@ -25,11 +25,22 @@ from mirae.api.accounts import AccountError, AuthStore
 from mirae.api.middleware import SecurityMiddleware
 from mirae.api.pipeline_routes import pipeline_router
 from mirae.api.security import ApiAuth
-from mirae.behavior.intents import ApproachPerson, Explore, FollowPerson, Intent, Move, Turn
+from mirae.behavior.intents import (
+    ApproachPerson,
+    Explore,
+    FollowPerson,
+    Intent,
+    Move,
+    Sleep,
+    Turn,
+)
 from mirae.core.bus import Topics
 from mirae.drive.kinematics import mix
 from mirae.pipeline.manager import PipelineManager
 from mirae.robot import Robot
+from mirae.speech.speaker import Speaker
+from mirae.story.store import MAX_CAST, Character, Episode, StoryState, StoryStore
+from mirae.story.teller import StoryError, StoryTeller
 
 Unit = Annotated[float, Field(ge=0.0, le=1.0)]
 Signed = Annotated[float, Field(ge=-1.0, le=1.0)]
@@ -56,13 +67,48 @@ class CommandRequest(RequestModel):
     text: Annotated[str, Field(min_length=1, max_length=500)]
 
 
+class StoryStartRequest(RequestModel):
+    premise: Annotated[str, Field(min_length=1, max_length=1000)]
+    genre: Annotated[str, Field(min_length=1, max_length=60)]
+    protagonist: Annotated[str, Field(min_length=1, max_length=40)]
+    cast: Annotated[list[Character], Field(min_length=1, max_length=MAX_CAST)]
+
+
+class SayRequest(RequestModel):
+    text: Annotated[str, Field(min_length=1, max_length=5000)]
+
+
+class StoryTellRequest(RequestModel):
+    sleep: bool = False
+
+
+class ActionToggleRequest(RequestModel):
+    enabled: bool
+
+
+# Optional things Mirae can do, each switched on or off from the dashboard.
+ACTIONS = {
+    "story": (
+        "Story",
+        "Tells one continuing story, a new episode each night, and remembers the cast.",
+    ),
+}
+
+
+def episode_json(episode: Episode) -> dict[str, Any]:
+    return {"night": episode.night, "text": episode.text, "created_at": episode.created_at}
+
+
 def create_app(robot: Robot) -> FastAPI:
     @asynccontextmanager
     async def lifespan(_: FastAPI) -> AsyncIterator[None]:
         await robot.start()
+        speaking = asyncio.create_task(speaker.run(), name="speaker")
         try:
             yield
         finally:
+            speaking.cancel()
+            await asyncio.gather(speaking, return_exceptions=True)
             await robot.stop()
 
     store = AuthStore(robot.config.api.database_path)
@@ -80,6 +126,9 @@ def create_app(robot: Robot) -> FastAPI:
     app.add_middleware(SecurityMiddleware)
     app.include_router(access_router(store, robot.config.api))
     manager = PipelineManager(store, robot)
+    speaker = Speaker(
+        robot.bus, lambda: robot.config.speech, lambda: manager.settings.secret("elevenlabs")
+    )
     app.state.pipeline = manager
     app.include_router(pipeline_router(manager))
     static = str(resources.files("mirae").joinpath("admin"))
@@ -98,6 +147,8 @@ def create_app(robot: Robot) -> FastAPI:
         return JSONResponse({"detail": str(error)}, status_code=error.status)
 
     planning = asyncio.Lock()
+    stories = StoryStore(store)
+    teller = StoryTeller(stories, lambda: robot._provider, lambda: robot.config.ai)
 
     def require_healthy() -> None:
         if not robot.healthy:
@@ -199,6 +250,112 @@ def create_app(robot: Robot) -> FastAPI:
             require_intent_hardware(planned)
             robot.behavior.handle(planned)
         return {"intent": planned.model_dump(), "behavior": robot.behavior.state.value}
+
+    @app.get("/api/speech")
+    async def speech() -> dict[str, Any]:
+        return {**speaker.snapshot(), "tts": robot.config.speech.tts}
+
+    @app.get("/api/speech/last.wav")
+    async def last_speech() -> Response:
+        audio = await asyncio.to_thread(speaker.wav)
+        if audio is None:
+            raise HTTPException(404, "nothing has been spoken yet")
+        return Response(audio, media_type="audio/wav")
+
+    @app.post("/api/speech/say")
+    async def say(req: SayRequest) -> dict[str, bool]:
+        robot.bus.publish(Topics.SAY, req.text)
+        return {"accepted": True}
+
+    @app.post("/api/speech/stop")
+    async def stop_speech() -> dict[str, bool]:
+        speaker.stop()
+        return {"stopped": True}
+
+    def action_enabled(name: str) -> bool:
+        return bool(manager.settings.value(f"action:{name}", True))
+
+    def require_action(name: str) -> None:
+        if not action_enabled(name):
+            raise HTTPException(409, f"the {ACTIONS[name][0]} action is turned off")
+
+    def actions_json() -> list[dict[str, Any]]:
+        return [
+            {"id": name, "name": label, "description": text, "enabled": action_enabled(name)}
+            for name, (label, text) in ACTIONS.items()
+        ]
+
+    @app.get("/api/actions")
+    async def actions() -> dict[str, Any]:
+        return {"actions": await asyncio.to_thread(actions_json)}
+
+    @app.put("/api/actions/{name}")
+    async def toggle_action(
+        name: str, req: ActionToggleRequest, request: Request
+    ) -> dict[str, Any]:
+        if name not in ACTIONS:
+            raise HTTPException(404, "unknown action")
+        await asyncio.to_thread(
+            manager.settings.set_value,
+            f"action:{name}",
+            req.enabled,
+            request.state.principal.username,
+        )
+        if name == "story" and not req.enabled:
+            speaker.stop()
+        return {"actions": await asyncio.to_thread(actions_json)}
+
+    @app.get("/api/story")
+    async def story() -> dict[str, Any]:
+        state = await asyncio.to_thread(stories.load)
+        episodes = await asyncio.to_thread(stories.episodes)
+        return {
+            "story": state.model_dump() if state else None,
+            "episodes": [episode_json(e) for e in episodes],
+            "writing": teller.busy,
+        }
+
+    @app.put("/api/story")
+    async def start_story(req: StoryStartRequest) -> dict[str, Any]:
+        """Start a new story. This replaces the current one and its episodes."""
+        require_action("story")
+        if teller.busy:
+            raise HTTPException(409, "an episode is being written")
+        try:
+            state = StoryState(
+                premise=req.premise,
+                genre=req.genre,
+                protagonist=req.protagonist,
+                cast=req.cast,
+            )
+        except ValueError as exc:
+            raise HTTPException(422, str(exc)) from exc
+        await asyncio.to_thread(stories.reset, state)
+        return {"story": state.model_dump(), "episodes": []}
+
+    @app.post("/api/story/tell")
+    async def tell_story(req: StoryTellRequest, request: Request) -> dict[str, Any]:
+        """Write tonight's episode and say it. With ``sleep``, Mirae sleeps afterwards."""
+        require_action("story")
+        if req.sleep:
+            require_healthy()
+        try:
+            result = await teller.tell()
+        except StoryError as exc:
+            raise HTTPException(exc.status, exc.detail) from exc
+        # Permissions and revocation may have changed while the LLM wrote.
+        await auth.authorize(request)
+        robot.bus.publish(Topics.SAY, result.episode.text)
+        # The episode is already saved; losing health meanwhile only skips sleeping.
+        if req.sleep and robot.healthy:
+            robot.behavior.handle(Sleep())
+        return {
+            "episode": episode_json(result.episode),
+            "story": result.state.model_dump(),
+            "continuity_updated": result.continuity_updated,
+            "changes": result.notes,
+            "behavior": robot.behavior.state.value,
+        }
 
     @app.websocket("/ws/telemetry")
     async def telemetry(ws: WebSocket) -> None:

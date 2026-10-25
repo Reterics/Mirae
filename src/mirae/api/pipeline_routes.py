@@ -6,7 +6,7 @@ import asyncio
 from typing import Any
 
 from fastapi import APIRouter, Query, Request, Response
-from pydantic import BaseModel, ConfigDict, ValidationError
+from pydantic import BaseModel, ConfigDict, Field, SecretStr, ValidationError
 
 from mirae.api.accounts import AccountError
 from mirae.pipeline.manager import PipelineManager
@@ -16,6 +16,14 @@ from mirae.pipeline.settings import ConnectionInput
 class Selection(BaseModel):
     model_config = ConfigDict(extra="forbid")
     connection_id: str | None
+
+
+class SecretInput(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+    api_key: SecretStr | None = Field(None, exclude=True)
+
+
+SECRETS = ("elevenlabs",)
 
 
 class Enabled(BaseModel):
@@ -85,6 +93,24 @@ def pipeline_router(manager: PipelineManager) -> APIRouter:
                 )
             except ValidationError as exc:
                 raise AccountError(422, "; ".join(error["msg"] for error in exc.errors())) from exc
+
+    @router.get("/secrets")
+    async def secrets() -> dict[str, bool]:
+        """Which service credentials are set. Values never leave the server."""
+        return {
+            name: await asyncio.to_thread(manager.settings.value, f"secret:{name}") is not None
+            for name in SECRETS
+        }
+
+    @router.put("/secrets/{name}")
+    async def set_secret(name: str, req: SecretInput, request: Request) -> dict[str, bool]:
+        if name not in SECRETS:
+            raise AccountError(404, "unknown credential")
+        value = req.api_key.get_secret_value().strip() if req.api_key else None
+        await asyncio.to_thread(
+            manager.settings.set_secret, name, value or None, request.state.principal.username
+        )
+        return {"set": bool(value)}
 
     @router.post("/dependencies/check")
     async def check_dependencies() -> list[dict[str, Any]]:

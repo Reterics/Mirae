@@ -1,4 +1,5 @@
 import { createPipelineUI } from "./pipeline-ui.js";
+import { createStoryUI } from "./story-ui.js";
 const $ = (selector) => document.querySelector(selector);
 const state = {
   user: null,
@@ -17,6 +18,7 @@ const state = {
 };
 const pages = {
   overview: ["Runtime", "", null],
+  actions: ["Actions", "", null],
   connections: ["LLM connections", "", "Add connection"],
   local: ["Local processing", "", null],
   hardware: ["Hardware", "", null],
@@ -62,6 +64,17 @@ const pipelineUI = createPipelineUI({
   toast,
   reload,
   navigate,
+  can,
+});
+const storyUI = createStoryUI({
+  state,
+  api,
+  escape,
+  badge,
+  field,
+  dialog,
+  saved,
+  toast,
   can,
 });
 let toastTimer;
@@ -327,6 +340,7 @@ function overview() {
 function render() {
   let html = pipelineUI.render(state.page);
   if (state.page === "overview") html = overview();
+  if (state.page === "actions") html = storyUI.render();
   if (state.page === "users")
     html = table(
       "Users",
@@ -381,6 +395,7 @@ function render() {
     );
   $("#content").innerHTML = html;
   pipelineUI.afterRender();
+  storyUI.afterRender();
   $("#table-search")?.addEventListener("input", filterTable);
   $("#table-filter")?.addEventListener("change", filterTable);
 }

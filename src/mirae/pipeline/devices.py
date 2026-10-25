@@ -87,6 +87,51 @@ def open_input(
             _open_inputs -= 1
 
 
+def _resolve_output(device_id: str | None) -> int | None:
+    """PortAudio index for a saved speaker identity. None means the system default."""
+    import sounddevice as sd
+
+    if device_id is None:
+        return None
+    hosts = sd.query_hostapis()
+    for index, device in enumerate(sd.query_devices()):
+        if device["max_output_channels"] > 0 and _input_id(device, hosts) == device_id:
+            return index
+    raise RuntimeError(
+        f"Selected speaker ({device_id}) is no longer connected. Refresh the device list."
+    )
+
+
+def play_pcm(
+    pcm: bytes, sample_rate: int, device_id: str | None, stop: threading.Event
+) -> dict[str, Any]:
+    """Play mono int16 PCM, blocking until done or ``stop`` is set. Returns the device info."""
+    import sounddevice as sd
+
+    global _open_inputs
+    with _audio_lock:
+        if _open_inputs == 0:
+            _rescan_audio()
+        device = _resolve_output(device_id)
+        info = sd.query_devices(device, "output")
+        stream = sd.RawOutputStream(
+            samplerate=sample_rate, channels=1, dtype="int16", device=device
+        )
+        # Counted with the microphones so a rescan never closes a playing stream.
+        _open_inputs += 1
+    try:
+        with stream:
+            block = sample_rate // 5 * 2
+            for start in range(0, len(pcm), block):
+                if stop.is_set():
+                    break
+                stream.write(pcm[start : start + block])
+    finally:
+        with _audio_lock:
+            _open_inputs -= 1
+    return dict(info)
+
+
 def camera_devices() -> dict[str, Any]:
     try:
         import cv2
@@ -151,7 +196,18 @@ def audio_devices() -> dict[str, Any]:
             if d["max_input_channels"] > 0
         ]
         inputs.sort(key=lambda d: (not d["default"], d["index"]))
-        return {"items": inputs, "default": default, "error": None, "checked_at": time.time()}
+        outputs = [
+            {"id": _input_id(d, hosts), "name": d["name"], "host_api": hosts[d["hostapi"]]["name"]}
+            for d in devices
+            if d.get("max_output_channels", 0) > 0
+        ]
+        return {
+            "items": inputs,
+            "outputs": outputs,
+            "default": default,
+            "error": None,
+            "checked_at": time.time(),
+        }
     except Exception as exc:
         return {
             "items": [],

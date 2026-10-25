@@ -29,7 +29,13 @@ class DelayedProvider:
         self.release = asyncio.Event()
         self.cancelled = False
 
-    async def complete(self, messages: list[ChatMessage], *, json_mode: bool = False) -> str:
+    async def complete(
+        self,
+        messages: list[ChatMessage],
+        *,
+        json_mode: bool = False,
+        timeout_s: float | None = None,
+    ) -> str:
         self.started.set()
         try:
             await self.release.wait()

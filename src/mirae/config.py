@@ -127,6 +127,9 @@ class AIConfig(ConfigModel):
     api_key: SecretStr | None = Field(None, repr=False, exclude=True)
     timeout_s: Positive = 20.0
     command_ttl_s: Positive = 5.0
+    # Bedtime story episodes are long generations; a 3B model on a Pi 5 needs minutes.
+    story_timeout_s: float = Field(300.0, gt=0.0, le=900.0)
+    story_words: int = Field(350, ge=100, le=1000)
 
 
 class VisionConfig(ConfigModel):
@@ -173,8 +176,19 @@ class SpeechConfig(ConfigModel):
         min_length=1,
         description="Local model path or cached model ID. Automatic downloads are disabled.",
     )
-    tts: Literal["none", "piper"] = "none"
-    tts_voice: str | None = None
+    tts: Literal["none", "piper", "elevenlabs"] = Field(
+        "none", description="Speaks story episodes and say intents. Piper runs locally."
+    )
+    tts_voice: str | None = Field(
+        None, min_length=1, description="Piper voice model (.onnx, with its .onnx.json beside it)."
+    )
+    elevenlabs_voice_id: str = Field("EXAVITQu4vr4xnSDxMaL", pattern=r"^[A-Za-z0-9]{8,40}$")
+    elevenlabs_model: str = Field("eleven_v4", pattern=r"^[a-z0-9_]{3,40}$")
+    output_device: str | None = Field(
+        None,
+        min_length=1,
+        description='Speaker identity ("<host API>:<name>"); null selects the system default.',
+    )
     input_device: str | None = Field(
         None,
         min_length=1,

@@ -54,7 +54,13 @@ def test_planner_with_fake_provider() -> None:
 
 
 class _BadProvider:
-    async def complete(self, messages: list[ChatMessage], *, json_mode: bool = False) -> str:
+    async def complete(
+        self,
+        messages: list[ChatMessage],
+        *,
+        json_mode: bool = False,
+        timeout_s: float | None = None,
+    ) -> str:
         return json.dumps({"action": "move", "direction": "forward", "speed": 99})
 
     async def aclose(self) -> None:

@@ -17,7 +17,13 @@ class ChatMessage(BaseModel):
 
 
 class LLMProvider(Protocol):
-    async def complete(self, messages: list[ChatMessage], *, json_mode: bool = False) -> str: ...
+    async def complete(
+        self,
+        messages: list[ChatMessage],
+        *,
+        json_mode: bool = False,
+        timeout_s: float | None = None,
+    ) -> str: ...
 
     async def aclose(self) -> None: ...
 
@@ -37,7 +43,13 @@ class FakeProvider:
         (r"\bsleep\b", {"action": "sleep"}),
     )
 
-    async def complete(self, messages: list[ChatMessage], *, json_mode: bool = False) -> str:
+    async def complete(
+        self,
+        messages: list[ChatMessage],
+        *,
+        json_mode: bool = False,
+        timeout_s: float | None = None,
+    ) -> str:
         text = messages[-1].content.lower()
         for pattern, intent in self._RULES:
             if re.search(pattern, text):
@@ -67,14 +79,22 @@ class OpenAICompatProvider:
             follow_redirects=False,
         )
 
-    async def complete(self, messages: list[ChatMessage], *, json_mode: bool = False) -> str:
+    async def complete(
+        self,
+        messages: list[ChatMessage],
+        *,
+        json_mode: bool = False,
+        timeout_s: float | None = None,
+    ) -> str:
         body: dict[str, object] = {
             "model": self._model,
             "messages": [m.model_dump() for m in messages],
         }
         if json_mode:
             body["response_format"] = {"type": "json_object"}
-        response = await self._client.post("chat/completions", json=body)
+        # Long generations (stories) pass their own timeout; commands use the client default.
+        timeout = httpx.USE_CLIENT_DEFAULT if timeout_s is None else httpx.Timeout(timeout_s)
+        response = await self._client.post("chat/completions", json=body, timeout=timeout)
         response.raise_for_status()
         content: str = response.json()["choices"][0]["message"]["content"]
         return content

@@ -44,12 +44,45 @@ class FasterWhisperSTT:
 
 
 class PiperTTS:
+    """Local neural TTS. The voice is a downloaded .onnx file; nothing leaves the machine."""
+
     def __init__(self, voice: str | None) -> None:
-        # TODO(V0.4): load a Piper voice (.onnx + .json, downloaded into models/).
-        raise NotImplementedError("Piper TTS is planned for V0.4")
+        from piper import PiperVoice
+
+        if not voice:
+            raise ValueError("Piper needs a voice model file (speech.tts_voice)")
+        self._voice = PiperVoice.load(voice)
 
     def synthesize(self, text: str) -> AudioClip:
-        raise NotImplementedError
+        chunks = list(self._voice.synthesize(text))
+        rate = chunks[0].sample_rate if chunks else 22050
+        return AudioClip(b"".join(c.audio_int16_bytes for c in chunks), rate)
+
+
+class ElevenLabsTTS:
+    """Hosted TTS over HTTPS. Optional: the text is sent to ElevenLabs."""
+
+    URL = "https://api.elevenlabs.io/v1/text-to-speech/{voice}"
+    RATE = 24000
+
+    def __init__(self, api_key: str | None, voice_id: str, model: str) -> None:
+        import httpx
+
+        if not api_key:
+            raise ValueError("ElevenLabs needs an API key; set it in Speech settings")
+        self._client = httpx.Client(headers={"xi-api-key": api_key}, timeout=120.0, trust_env=False)
+        self._voice = voice_id
+        self._model = model
+
+    def synthesize(self, text: str) -> AudioClip:
+        response = self._client.post(
+            self.URL.format(voice=self._voice),
+            params={"output_format": f"pcm_{self.RATE}"},
+            json={"text": text, "model_id": self._model},
+        )
+        if response.status_code != 200:
+            raise RuntimeError(f"ElevenLabs returned HTTP {response.status_code}: {response.text}")
+        return AudioClip(response.content, self.RATE)
 
 
 def build_stt(cfg: SpeechConfig) -> SpeechToText:
@@ -58,7 +91,10 @@ def build_stt(cfg: SpeechConfig) -> SpeechToText:
     return NullSpeechToText()
 
 
-def build_tts(cfg: SpeechConfig) -> TextToSpeech:
-    if cfg.enabled and cfg.tts == "piper":
+def build_tts(cfg: SpeechConfig, elevenlabs_key: str | None = None) -> TextToSpeech:
+    """Speaking is independent of ``enabled``, which only controls listening."""
+    if cfg.tts == "piper":
         return PiperTTS(cfg.tts_voice)
+    if cfg.tts == "elevenlabs":
+        return ElevenLabsTTS(elevenlabs_key, cfg.elevenlabs_voice_id, cfg.elevenlabs_model)
     return NullTextToSpeech()

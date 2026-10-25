@@ -1031,3 +1031,32 @@ label textarea {
     padding: 23px;
   }
 }
+.story-episode {
+  max-width: 68ch;
+  padding: 4px 18px 10px;
+  line-height: 1.65;
+}
+.story-episode h3 {
+  margin: 12px 0 6px;
+}
+.story-episode p {
+  margin: 0 0 12px;
+}
+.story-audio,
+.story-writing {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  padding: 10px 18px;
+}
+.story-audio audio {
+  width: min(420px, 100%);
+}
+.story-writing progress {
+  width: 140px;
+}
+.story-sleep {
+  align-items: center;
+  font-size: 13px;
+}

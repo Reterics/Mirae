@@ -80,7 +80,34 @@ The software watchdog requires the Python interpreter and GPIO driver to remain 
 | POST | `/api/stop`, `/api/estop`, `/api/estop/release` | |
 | POST | `/api/intent` | Send an intent directly, e.g. `{"action": "turn", "direction": "left"}` |
 | POST | `/api/ai/command` | `{"text": "turn left"}` → LLM → intent |
+| GET | `/api/actions` | Optional actions (currently `story`) and whether each is on |
+| PUT | `/api/actions/{id}` | Turn an action on or off: `{"enabled": false}` |
+| GET | `/api/story` | Story state, the last three episodes, and whether one is being written |
+| PUT | `/api/story` | Start a new story (replaces the old one): `{"premise", "protagonist", "cast": [{"name", "role", "description"}]}` |
+| POST | `/api/story/tell` | Write and say tonight's episode; `{"sleep": true}` puts Mirae to sleep afterwards |
 | WS | `/ws/telemetry` | Telemetry stream at `api.telemetry_hz` |
+
+### Story
+
+Story is an optional action: turn it on or off on the dashboard's **Actions** page (on by default). While it is off, `PUT /api/story` and `POST /api/story/tell` return HTTP 409; the story and its episodes are kept.
+
+Mirae tells one serial story, one episode per night, and keeps it consistent between nights. Each episode prompt has three parts: the long-term reference (fixed genre and premise plus a rolling summary of at most 1500 characters; the model is told to stay in the genre), the current state (main character, active cast, departed characters) and the current situation (where the last episode ended).
+
+An episode takes two LLM calls. The first writes plain prose. The second returns JSON continuity notes: who joined, who left or died, the new summary and the closing situation. Code applies the notes, not the model: a removal must name an active cast member, the main character never leaves, characters who died never return, characters who left may come back, and the cast holds at most 12. If the notes are invalid, the episode is still saved, the cast and summary stay as they were, and the situation becomes the episode's last paragraph. Episodes and state are saved in one SQLite transaction in `api.database_path`; an episode written against a story that changed meanwhile is rejected with HTTP 409.
+
+Generation is bounded by `ai.story_timeout_s` (300 s) and aims for `ai.story_words` (350). The story is text and never produces motion. The episode is published on `speech.say` and spoken by the speaker service.
+
+### Voice
+
+The speaker service (`speech/speaker.py`) speaks everything published on `speech.say`: story episodes and `say` intents. Configure it on the dashboard's **Actions** page under **Voice**:
+
+| `speech.tts` | Engine | Notes |
+|---|---|---|
+| `elevenlabs` | ElevenLabs over HTTPS (`elevenlabs_voice_id`, `elevenlabs_model`, default `eleven_v4`) | Sends the text to ElevenLabs. The API key is stored encrypted with the LLM credentials and never returned by the API. |
+| `piper` | Piper, local and offline (`tts_voice` = path to a `.onnx` voice with its `.onnx.json`) | Needs the `speech` extra. |
+| `none` | Off | Default. |
+
+Speaking does not depend on `speech.enabled`, which only controls listening. Playback goes to `speech.output_device` (a `"<host API>:<name>"` identity, null for the system default). `GET /api/speech` reports the state, `GET /api/speech/last.wav` returns the last clip, `POST /api/speech/say` speaks a text and `POST /api/speech/stop` stops playback and drops queued speech.
 
 The administration console is at `http://<host>:8000/admin`. The OpenAPI schema is at `/openapi.json`; the dashboard uses local assets and makes no third-party requests.
 
