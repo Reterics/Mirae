@@ -150,3 +150,41 @@ def test_camera_check_reuses_the_running_worker_without_opening_another_device(
         assert client.post("/api/admin/pipeline/camera/check").status_code == 200
         assert client.get("/api/admin/pipeline/camera/frame").content == b"actual-worker-frame"
     build.assert_not_called()
+
+
+def test_failed_model_refresh_cannot_activate_old_marker(
+    account_store: AuthStore, tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    body = b"previous-model"
+    monkeypatch.setitem(
+        CATALOG,
+        "refresh-test",
+        {
+            "name": "Refresh fixture",
+            "kind": "speech",
+            "files": [("model.bin", len(body), hashlib.sha256(body).hexdigest(), "sha256")],
+            "base": "https://fixture.invalid/",
+        },
+    )
+    runner = JobRunner(account_store)
+    library = ModelLibrary(tmp_path / "models", runner)
+    directory = library.directory("refresh-test")
+    directory.mkdir(parents=True)
+    (directory / "model.bin").write_bytes(body)
+    (directory / "installed.json").write_text("{}")
+    assert library.installed("refresh-test")
+    original = httpx.Client
+    monkeypatch.setattr(
+        httpx,
+        "Client",
+        lambda **kwargs: original(
+            transport=httpx.MockTransport(lambda request: httpx.Response(503)), **kwargs
+        ),
+    )
+    job = runner.start(
+        "download", "refresh-test", "admin", lambda job: library.download(job, "refresh-test")
+    )
+    assert wait_job(runner, job)["state"] == "failed"
+    assert not library.installed("refresh-test")
+    with pytest.raises(AccountError, match="download this model"):
+        library.settings("refresh-test")

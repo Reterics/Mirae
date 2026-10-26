@@ -137,7 +137,10 @@ def camera_devices() -> dict[str, Any]:
         import cv2
         from cv2_enumerate_cameras import enumerate_cameras
 
-        backend = cv2.CAP_DSHOW if platform.system() == "Windows" else cv2.CAP_ANY
+        backend = {
+            "Windows": cv2.CAP_DSHOW,
+            "Darwin": cv2.CAP_AVFOUNDATION,
+        }.get(platform.system(), cv2.CAP_ANY)
         cameras: list[dict[str, Any]] = [
             {
                 "id": f"opencv:{c.backend}:{c.path or c.name}",
@@ -181,7 +184,12 @@ def audio_devices() -> dict[str, Any]:
                 _rescan_audio()
             devices = sd.query_devices()
             hosts = sd.query_hostapis()
-            default = int(sd.query_devices(kind="input")["index"])
+            # Output-only machines and unplugged default microphones still have
+            # useful devices. Failure to resolve a default must not hide them.
+            try:
+                default = int(sd.query_devices(kind="input")["index"])
+            except sd.PortAudioError:
+                default = None
         inputs = [
             {
                 "id": _input_id(d, hosts),
@@ -211,6 +219,7 @@ def audio_devices() -> dict[str, Any]:
     except Exception as exc:
         return {
             "items": [],
+            "outputs": [],
             "default": None,
             "error": f"{type(exc).__name__}: {exc}",
             "checked_at": time.time(),

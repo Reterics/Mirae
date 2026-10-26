@@ -35,6 +35,7 @@ DEPENDENCIES = {
     "cameras": ("Camera discovery", "cv2_enumerate_cameras", ("cv2-enumerate-cameras",)),
     "faces": ("face_recognition", "face_recognition", ("face-recognition",)),
     "whisper": ("faster-whisper", "faster_whisper", ("faster-whisper",)),
+    "piper": ("Piper text-to-speech", "piper", ("piper-tts",)),
     "audio": ("Audio input", "sounddevice", ("sounddevice",)),
     "picamera2": ("Picamera2", "picamera2", ("picamera2",)),
     "gpio": ("GPIO", "gpiozero", ("gpiozero",)),

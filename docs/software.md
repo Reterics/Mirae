@@ -21,6 +21,64 @@ How the robot software is built, and how it runs on Windows, macOS, CI and the P
 | Config | TOML profiles (`local`, `pi`) + user file + managed SQLite settings, validated by pydantic | |
 | Quality | ruff (lint + format), mypy `--strict`, pytest | |
 
+## Desktop installation and verification
+
+Use Python 3.13 for the desktop camera and speech stack (the base server also
+tests Python 3.11). `uv` can download the interpreter; macOS's system Python 3.9
+is too old.
+
+```bash
+uv sync --locked --python 3.13 --extra vision --extra speech
+uv run --no-sync mirae run
+```
+
+Use `--no-sync` to run the environment prepared by the dashboard. A subsequent
+plain `uv sync` or `uv run --exact` can remove optional packages installed there.
+When syncing again, include the extras you want to keep.
+
+| Platform | Native prerequisites and device access |
+|---|---|
+| macOS (Apple Silicon or Intel) | Camera and microphone access must be enabled for the terminal/IDE/app launching Mirae under System Settings → Privacy & Security. Restart Mirae after granting access. Face recognition additionally needs Xcode Command Line Tools (`xcode-select --install`) and CMake (`brew install cmake` or `uv pip install cmake`). |
+| Windows | Allow desktop apps to access the camera and microphone in Windows privacy settings. Face recognition needs Visual Studio's **Desktop development with C++**, Windows SDK and CMake tools. |
+| Linux desktop | Install PortAudio (`sudo apt-get install libportaudio2` on Debian/Ubuntu), grant access to the camera/audio devices, and run in a session with working audio. Face recognition additionally needs `build-essential` and `cmake`. |
+| Raspberry Pi | Use [deploy/pi/install.sh](../deploy/pi/install.sh) for the system GPIO, I2C and libcamera dependencies. Desktop tests do not validate physical robot hardware. |
+
+In the admin console, check imports, refresh devices, and test the selected
+camera/microphone. Camera discovery uses AVFoundation on macOS and DirectShow on
+Windows. Microphones and speakers are saved by their device identity. A machine
+without a default microphone can still list its speakers and other microphones.
+
+Download and activate an SSD or Whisper model from Local processing. Downloads
+are pinned and verified before activation. Piper can be installed from the same
+dependency table; supply a voice `.onnx` and its matching `.onnx.json` in
+`speech.tts_voice`. Model loading during normal operation never downloads files.
+
+For [Ollama Cloud](https://docs.ollama.com/api/openai-compatibility), add an Ollama
+connection with base URL `https://ollama.com/v1` and an API key, check the models,
+then select a returned model ID. Local Ollama uses `http://localhost:11434/v1`.
+Cloud requests still respect the command expiration deadline; increasing the
+connection timeout does not increase the safety deadline.
+
+`uv run --no-sync pytest` runs the offline suite. To additionally download about
+165 MB of pinned test models and exercise SSD inference, Piper synthesis and
+Whisper transcription/resampling:
+
+```bash
+# macOS / Linux
+MIRAE_TEST_MODELS=1 uv run --no-sync pytest tests/test_local_engines.py
+```
+
+```powershell
+# Windows PowerShell
+$env:MIRAE_TEST_MODELS = "1"
+uv run --no-sync pytest tests/test_local_engines.py
+```
+
+CI installs the `faces` extra too and checks native face detection. It runs these
+native engine checks on Windows, macOS and Linux with Python 3.13,
+in addition to the base server matrix and the ARM64 dependency job. Camera,
+microphone and physical Pi hardware access require tests on the target machine.
+
 ## Runtime
 
 ```text

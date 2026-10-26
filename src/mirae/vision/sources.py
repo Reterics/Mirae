@@ -33,7 +33,11 @@ class OpenCVCamera:
         self._cap = cv2.VideoCapture(selected["index"], selected["backend"])
         if not self._cap.isOpened():
             self._cap.release()
-            raise RuntimeError("configured camera could not be opened")
+            raise RuntimeError(
+                "Configured camera could not be opened. Close other camera apps and check "
+                "camera permissions (macOS: System Settings > Privacy & Security > Camera "
+                "for the terminal or app running Mirae)."
+            )
         self._cap.set(cv2.CAP_PROP_FRAME_WIDTH, cfg.width)
         self._cap.set(cv2.CAP_PROP_FRAME_HEIGHT, cfg.height)
 
@@ -57,18 +61,24 @@ class Picamera2Camera:
         )
         self.device_name = next((c["Model"] for c in available if c["Num"] == index), "Pi camera")
         self._cam = Picamera2(index)
-        config = self._cam.create_video_configuration(
-            main={"size": (cfg.width, cfg.height), "format": "BGR888"}
-        )
-        self._cam.configure(config)
-        self._cam.start()
+        try:
+            config = self._cam.create_video_configuration(
+                main={"size": (cfg.width, cfg.height), "format": "BGR888"}
+            )
+            self._cam.configure(config)
+            self._cam.start()
+        except BaseException:
+            self._cam.close()
+            raise
 
     def read(self) -> Any | None:
         return self._cam.capture_array()
 
     def close(self) -> None:
-        self._cam.stop()
-        self._cam.close()
+        try:
+            self._cam.stop()
+        finally:
+            self._cam.close()
 
 
 def build_camera(cfg: VisionConfig) -> CameraSource:

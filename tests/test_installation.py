@@ -124,5 +124,6 @@ def test_windows_without_cpp_tools_gets_an_actionable_error(
 ) -> None:
     monkeypatch.setattr(sys, "platform", "win32")
     monkeypatch.setattr(installation, "windows_cpp_tools", lambda: None)
+    monkeypatch.setattr("mirae.pipeline.installation.shutil.which", lambda command: None)
     with pytest.raises(RuntimeError, match=r"Desktop development with C\+\+"):
         installation.face_build_environment()

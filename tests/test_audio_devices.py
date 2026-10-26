@@ -108,3 +108,23 @@ def test_open_input_opens_the_resolved_index(sd: FakeSoundDevice) -> None:
 def test_old_index_setting_resets_to_system_default() -> None:
     assert SpeechConfig.model_validate({"input_device": 3}).input_device is None
     assert SpeechConfig.model_validate({"input_device": "MME:Mic"}).input_device == "MME:Mic"
+
+
+def test_missing_default_microphone_preserves_available_devices(
+    sd: FakeSoundDevice, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    sd.listing[0]["max_output_channels"] = 2
+    original = sd.query_devices
+
+    def query(device: int | None = None, kind: str | None = None) -> Any:
+        if kind == "input":
+            raise sd.PortAudioError("No default input device")
+        return original(device, kind)
+
+    monkeypatch.setattr(sd, "query_devices", query)
+    result = devices.audio_devices()
+    assert result["error"] is None
+    assert result["default"] is None
+    assert len(result["items"]) == 3
+    assert result["outputs"][0]["name"] == "Speakers"
+    assert not any(item["default"] for item in result["items"])

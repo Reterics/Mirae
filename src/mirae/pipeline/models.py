@@ -135,6 +135,9 @@ class ModelLibrary:
         total = sum(f[1] for f in info["files"])
         if shutil.disk_usage(directory).free < total + 50_000_000:
             raise RuntimeError("insufficient free space for the model")
+        # A failed refresh may leave a mixture of old and new files. Only a
+        # completely verified download may be activated, including after restart.
+        (directory / "installed.json").unlink(missing_ok=True)
         completed = 0
         with httpx.Client(timeout=60, follow_redirects=True, trust_env=False) as client:
             for filename, size, expected, algorithm in info["files"]:

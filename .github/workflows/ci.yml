@@ -59,5 +59,30 @@ jobs:
       - run: sudo apt-get update && sudo apt-get install -y libportaudio2
       - run: uv sync --locked --extra pi --extra vision --extra speech
       - name: Import optional engines
-        run: uv run python -c "import gpiozero, smbus2, cv2, onnxruntime, faster_whisper, sounddevice; print('ok')"
-      - run: uv run pytest
+        run: uv run --no-sync python -c "import gpiozero, smbus2, cv2, onnxruntime, faster_whisper, sounddevice; print('ok')"
+      - run: uv run --no-sync pytest
+
+  local-engines:
+    # Exercise native wheels and real verified inference on each desktop OS.
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+    runs-on: ${{ matrix.os }}
+    env:
+      CMAKE_BUILD_PARALLEL_LEVEL: "2"
+      DLIB_USE_CUDA: "OFF"
+      DLIB_NO_GUI_SUPPORT: "ON"
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          lfs: false
+      - uses: astral-sh/setup-uv@v6
+        with:
+          python-version: "3.13"
+      - if: runner.os == 'Linux'
+        run: sudo apt-get update && sudo apt-get install -y libportaudio2
+      - run: uv sync --locked --extra vision --extra speech --extra faces
+      - run: uv run --no-sync pytest
+        env:
+          MIRAE_TEST_MODELS: "1"

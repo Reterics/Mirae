@@ -75,7 +75,7 @@ def windows_cpp_tools() -> Path | None:
         errors="replace",
         timeout=10,
         check=False,
-        creationflags=subprocess.CREATE_NO_WINDOW if sys.platform == "win32" else 0,
+        creationflags=getattr(subprocess, "CREATE_NO_WINDOW", 0) if sys.platform == "win32" else 0,
     )
     root = result.stdout.strip()
     return Path(root) if result.returncode == 0 and root and Path(root).is_dir() else None
@@ -97,11 +97,13 @@ def face_build_environment() -> dict[str, str]:
             path = str(bundled.parent) + os.pathsep + path
     elif not (shutil.which("c++") or shutil.which("g++") or shutil.which("clang++")):
         raise RuntimeError(
-            "dlib requires a C++ compiler. Install the platform's build tools first."
+            "dlib requires a C++ compiler. On macOS run xcode-select --install; "
+            "on Debian/Ubuntu install build-essential."
         )
     if not cmake:
         raise RuntimeError(
-            "dlib requires CMake. Install CMake (or Visual Studio's CMake tools), then retry."
+            "dlib requires CMake. On macOS run brew install cmake; on Debian/Ubuntu "
+            "install cmake; on Windows install Visual Studio's CMake tools, then retry."
         )
     return {
         "PATH": path,

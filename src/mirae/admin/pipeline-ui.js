@@ -148,7 +148,7 @@ export function createPipelineUI({
   function local() {
     const p = state.pipeline;
     const dependencies = (p.dependencies || []).filter((d) =>
-      ["opencv", "cameras", "faces", "whisper", "audio"].includes(d.id),
+      ["opencv", "cameras", "faces", "whisper", "piper", "audio"].includes(d.id),
     );
     const rows = dependencies
       .map(

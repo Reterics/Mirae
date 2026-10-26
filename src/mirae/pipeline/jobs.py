@@ -21,8 +21,9 @@ from mirae.pipeline.installation import (
 
 PACKAGES = {
     "opencv": ("opencv-python-headless==4.13.0.92", "cv2-enumerate-cameras==1.4.0"),
-    "audio": ("sounddevice==0.5.6",),
+    "audio": ("sounddevice==0.5.6", "numpy>=1.26"),
     "whisper": ("faster-whisper==1.2.1", "sounddevice==0.5.6"),
+    "piper": ("piper-tts==1.8.0", "sounddevice==0.5.6"),
     "faces": ("dlib==20.0.1", "face-recognition==1.3.0", "setuptools==80.9.0"),
     "gpio": ("gpiozero==2.0.1", "lgpio==0.2.2.0"),
     "tof": ("vl53l1x==0.0.5",),
@@ -155,7 +156,9 @@ class JobRunner:
             encoding="utf-8",
             errors="replace",
             env=env,
-            creationflags=subprocess.CREATE_NO_WINDOW if sys.platform == "win32" else 0,
+            creationflags=getattr(subprocess, "CREATE_NO_WINDOW", 0)
+            if sys.platform == "win32"
+            else 0,
         ) as process:
             finished = threading.Event()
 
@@ -222,8 +225,9 @@ class JobRunner:
         )
         modules = {
             "opencv": "cv2, cv2_enumerate_cameras",
-            "audio": "sounddevice",
+            "audio": "numpy, sounddevice",
             "whisper": "faster_whisper, sounddevice",
+            "piper": "piper, sounddevice",
             "faces": "dlib, face_recognition",
             "gpio": "gpiozero",
             "tof": "VL53L1X",
